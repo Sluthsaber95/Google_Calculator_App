@@ -142,4 +142,23 @@ Improvements
 Research what is already available out there, such native functions and objects of the language
 File size vs File processing time
 
+
+-------------------------------------------------------------------------------------
+Doc Info - 09/09/2017 -  00:32
+-------------------------------------------------------------------------------------
+// Documentation - every object is stored with a name, regex, function 
+//-> all these represent the available buttons
+// maybe a place in a more advance
+
+
+// const degreeToRad = (angle) => {
+//     return angle * (Math.PI / 180);
+// }
+// const radToDegree = (angle) => {
+//     return angle * (180 / Math.PI);
+// }
+
+// 1) There is some concern with regex literal, need to be careful and place some conditional cases for (\d+\.?\d+), what if the value is just an integer 
+// 2) get rid of incrementer, place it within the function - stop it from polluting the global namespace
+
 	
