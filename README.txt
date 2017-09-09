@@ -149,6 +149,10 @@ Doc Info - 09/09/2017 -  17:31
 2) Need a way integrate random values into tests,
 	i) Random floats
 	ii) Random String values, where errors are expected to return
+3) Should not focus on the inverse functions at the moment
+4) Need to test out
+    i) Constants will have it's own tests
+    ii) Power Values have their own tests as well
 -------------------------------------------------------------------------------------
 Doc Info - 09/09/2017 -  17:10
 -------------------------------------------------------------------------------------
