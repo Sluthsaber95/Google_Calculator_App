@@ -1,0 +1,26 @@
+{
+    "name": "JavaScript_Calculator",
+    "version": "1.0.0",
+    "description": "Google Calculator Clone",
+    "main": "JavaScript_Calculator.js",
+    "scripts": {
+        "test": "mocha testFunctions --watch",
+        "build": "babel src -d lib"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/anthonytranDev/JavaScript_Calculator.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/anthonytranDev/JavaScript_Calculator/issues"
+    },
+    "homepage": "https://github.com/anthonytranDev/JavaScript_Calculator#readme",
+    "devDependencies": {
+        "babel-cli": "^6.26.0",
+        "chai": "^4.1.2",
+        "mocha": "^3.5.0"
+    }
+}
