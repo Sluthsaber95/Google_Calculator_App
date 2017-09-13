@@ -47,7 +47,7 @@ const factorial = num => {
 };
 const prioritise = (str, propsName = []) => {
     let i = 0;
-    return eval(str);
+    return str;
     const prioritising = (str, propsName) => {
         if (storedFunction[propsName[i]].regex.test(str)) {
             str = str.replace(storedFunction[propsName[i]].regex, storedFunction[propsName[i]].function);
@@ -216,7 +216,7 @@ describe.skip("INDIVIDUAL FUNCTION TESTS =>", function() {
     }
 });
 
-describe.only("POWER INDEX TESTS =>", function() {
+describe.skip("POWER INDEX TESTS =>", function() {
     // all decimal values are kept to 4 d.p.
     const testCases = [{
             testName: "Power Base [Int] Index [Int]",
@@ -247,11 +247,131 @@ describe.only("POWER INDEX TESTS =>", function() {
             testName: "Square Root [Float]",
             testValue: "45.2^0.5",
             expectedValue: 6.7231
+        },
+        {
+            testName: "Exponent [Int]",
+            testValue: "10 ^ 2",
+            expectedValue: 100
+        },
+        {
+            testName: "Exponent [Float]",
+            testValue: "10^0.6",
+            expectedValue: 3.9811
         }
     ];
     for (let i = 0; i < testCases.length; i++) { //assert.equal(true, true) //passed the test
         it(testCases[i].testName, function() {
             assert.equal(prioritise(testCases[i].testValue), testCases[i].expectedValue, "Expected prioritise(" + testCases[i].testValue + ") to return " + testCases[i].expectedValue);
+        });
+    }
+});
+
+describe.only("SINGULAR GROUPS - 2 FEATURE COMBINATION TESTS     =>", function() {
+    // all decimal values are kept to 4 d.p.
+
+    // Doc Info - 10/09/2017 - 22:25
+    // 12 Test cases
+    /*
+    Below denotes testable groups
+
+    1) Factor - Factorial + Percentages - whether a factorial/percentage is used, a test can be used to test for both.
+    2) Func - Functions - sine, cosine, tangent, natural-log or log
+    3) Power - Power functions
+    4) Arith - Arithmetic operators
+    *5) Brackets - need to know how bracket can play into this. We are always going place brackets in 
+    *6) π and e - I am ruling these out, as they are precedence independent
+
+    In this case 2 features.name combinations, consists of a combination of any of these 2 testable groups
+    */
+
+    //>>>>>>>> Need to use the testGroup const
+
+    // Set tests
+    const testCases = [{
+        testName: "Factor + Func",
+        testValue: "log(10!)",
+        expectedValue: 6.5598
+    }];
+    for (let i = 0; i < testCases.length; i++) { //assert.equal(true, true) //passed the test
+        it(testCases[i].testName, function() {
+            assert.equal(prioritise(testCases[i].testValue), testCases[i].expectedValue, "Expected prioritise(" + testCases[i].testValue + ") to return " + testCases[i].expectedValue);
+        });
+    }
+
+    // randomised test
+    // It should be a good idea to check for any repetition, 
+    // if any 2 function that have been used twice
+
+    // >>>>>>>> All code below this learn need fixing
+    const randomTestGroup = () => {
+        const testGroup = [
+            { unitName: "Factor", testUnit: ["!", "%"] },
+            { unitName: "Func", testUnit: ["sin(", "cos(", "tan(", "ln(", "log("] },
+            { unitName: "Power", testUnit: ["^"] },
+            { unitName: "Arith", testUnit: ["+", "-", "*", "/"] }
+        ];
+        let i = Math.floor(Math.random() * testGroup.length);
+        let j = Math.floor(Math.random() * testGroup[i].testUnit.length)
+        return {
+            name: testGroup[i].unitName,
+            unit: testGroup[i].testUnit[j]
+        }
+    }
+
+    const createTestValue = () => {
+        let i = 0;
+        let j = 0;
+        let endStr = "";
+        let featureNames = [];
+        let value = [...Array(6).keys()].map(x => { return "" + Math.floor(Math.random() * 20 + 1); })
+        let feature = [...Array(6).keys()].map(x => { return randomTestGroup(); })
+        let testValue = () => {
+
+            switch (feature[i].name) {
+                case "Factor":
+                    endStr === "" ? endStr = value[i] + feature[i].unit :
+                        endStr + feature[i].unit;
+                    i++;
+                    break;
+                case "Func":
+                    endStr === "" ? endStr = feature[i].unit + value[i] + ")" :
+                        endStr = feature[i].unit + endStr + ")"
+                    i++;
+                    break;
+                case "Power":
+                    endStr === "" ? endStr = value[i] + feature[i].unit + value[++i] :
+                        endStr = endStr + feature[i].unit + value[i];
+                    i++;
+                    break;
+                case "Arith":
+                    endStr === "" ? endStr = value[i] + " " + feature[i].unit + " " + value[++i] :
+                        endStr = endStr + " " + feature[i].unit + " " + value[i];
+                    i++;
+                    break;
+            }
+            featureNames.push(feature[i]);
+            j++;
+            if (j == 3) {
+                return [featureNames[0], featureNames[1], endStr];
+            }
+            return testValue();
+        }
+        return testValue();
+    }
+    const randomTestCases = [{
+            testName: "" + createTestValue()[0] + createTestValue()[1],
+            testValue: createTestValue()[2],
+            expectedValue: 6.5598
+        },
+        {
+            testName: "" + createTestValue()[0] + createTestValue()[1],
+            testValue: createTestValue()[2],
+            expectedValue: 6.5598
+        }
+    ];
+    for (let i = 0; i < randomTestCases.length; i++) {
+        it(randomTestCases[i].testName, function() {
+            assert.equal(prioritise(randomTestCases[i].testValue), randomTestCases[i].expectedValue);
         });
     }
 });
