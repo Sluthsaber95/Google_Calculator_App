@@ -1,39 +1,17 @@
 const mocha = require("mocha");
 const assert = require("chai").assert;
 
-const degreeToRad = angle => {
-    return angle * (Math.PI / 180);
-};
-const radToDegree = angle => {
-    return angle * (180 / Math.PI);
-};
-const storedFunction = {
-    "percentage": {
-        "regex": /(\d+%)/g, //1) 
-        "function": (match, p1) => {
-            return p1.slice(0, p1.length - 1) / 100;
-        }
-    },
-    "factorial": {
-        "regex": /(\d+!)/g,
-        "function": (match, p1) => {
-            return factorial(p1.slice(0, p1.length - 1));
-        }
-    },
-    "log": {
-        "regex": /(log\()(\d+\.?\d+)(\))/g,
-        "function": (match, p1, p2) => {
-            return Math.log10(p2);
-        }
-    },
-    "sine": {
-        "regex": /(sin\()(\d+\.?\d+)(\))/g,
-        "function": (match, p1, p2) => {
-            return Math.sin(p2);
-        }
-    }
-};
+const toggleAngle = (angleUnits) => {
+    return angleUnits === "Radian" ? 1 : (Math.PI / 180);
+}
 const factorial = num => {
+    if (typeof num !== "number" || isNaN(num)) {
+        return NaN;
+    }
+    // the number is based on chromes MAX call stack 11034, firefox 50994
+    else if (num > 10000) {
+        return Infinity;
+    }
     let val = 1;
     const calcFactorial = num => {
         if (num > 1) {
@@ -45,173 +23,168 @@ const factorial = num => {
     };
     return calcFactorial(num);
 };
+
+const percentage = num => {
+    return num / 100;
+}
 const prioritise = (str, propsName = []) => {
     let i = 0;
     return str;
-    const prioritising = (str, propsName) => {
-        if (storedFunction[propsName[i]].regex.test(str)) {
-            str = str.replace(storedFunction[propsName[i]].regex, storedFunction[propsName[i]].function);
-            i === propsName.length - 1 ? i : i++;
-            return prioritising(str, propsName);
-        }
-        return str;
-    };
-    return prioritising(str, propsName);
 };
 
 
 describe.skip("BASIC ARITHMETIC TESTS =>", function() {
     const testCases = [{
-            testName: "Addition [Int]",
-            testValue: '3 + 4',
-            expectedValue: 7
+            name: "Addition [Int]",
+            value: '3 + 4',
+            expected: 7
         },
         {
-            testName: "Addition [Float]",
-            testValue: '5.6 + 9.4',
-            expectedValue: 15.0
+            name: "Addition [Float]",
+            value: '5.6 + 9.4',
+            expected: 15.0
         },
         {
-            testName: "Substract [Int]",
-            testValue: '17 - 6',
-            expectedValue: 11
+            name: "Substract [Int]",
+            value: '17 - 6',
+            expected: 11
         },
         {
-            testName: "Substract [Float]",
-            testValue: '15.0 - 6.9',
-            expectedValue: 8.1
+            name: "Substract [Float]",
+            value: '15.0 - 6.9',
+            expected: 8.1
         },
         {
-            testName: "Multiple [Int]",
-            testValue: '5 * 12',
-            expectedValue: 60
+            name: "Multiple [Int]",
+            value: '5 * 12',
+            expected: 60
         },
         {
-            testName: "Multiple [Float]",
-            testValue: '1.2 * 1.3',
-            expectedValue: 1.56
+            name: "Multiple [Float]",
+            value: '1.2 * 1.3',
+            expected: 1.56
         },
         {
-            testName: "Divide [Int]",
-            testValue: '16 / 2',
-            expectedValue: 8
+            name: "Divide [Int]",
+            value: '16 / 2',
+            expected: 8
         },
         {
-            testName: "Divide [Float]",
-            testValue: '21.6 / 3',
-            expectedValue: 7.2
+            name: "Divide [Float]",
+            value: '21.6 / 3',
+            expected: 7.2
         }
     ];
     for (let i = 0; i < testCases.length; i++) { //assert.equal(true, true) //passed the test
-        it(testCases[i].testName, function() {
-            assert.equal(prioritise(testCases[i].testValue), testCases[i].expectedValue, "Expected prioritise(" + testCases[i].testValue + ") to return " + testCases[i].expectedValue);
+        it(testCases[i].name, function() {
+            assert.equal(prioritise(testCases[i].value), testCases[i].expected, "Expected prioritise(" + testCases[i].value + ") to return " + testCases[i].expected);
         });
     }
 });
 
-describe.skip("INDIVIDUAL FUNCTION TESTS =>", function() {
+describe.skip("INDIVIDUAL FUNCTION + CONSTANT TESTS =>", function() {
     // all decimal values are kept to 4 d.p.
     const testCases = [{
-            testName: "Degrees [Int] To Radian Conversion ",
-            testValue: '360', // 4 d.p.
-            expectedValue: 6.2832
+            name: "Degrees [Int] To Radian Conversion ",
+            value: '360', // 4 d.p.
+            expected: 6.2832
         },
         {
-            testName: "Degree [Float] to Radian Conversion",
-            testValue: '360.1',
-            expectedValue: 6.2849
+            name: "Degree [Float] to Radian Conversion",
+            value: '360.1',
+            expected: 6.2849
         },
         {
-            testName: "Radian [Int] to Degrees Conversion",
-            testValue: '1',
-            expectedValue: 57.2958
+            name: "Radian [Int] to Degrees Conversion",
+            value: '1',
+            expected: 57.2958
         },
         {
-            testName: "Radian [Float] to Degrees Conversion",
-            testValue: '1.1',
-            expectedValue: 63.0254
+            name: "Radian [Float] to Degrees Conversion",
+            value: '1.1',
+            expected: 63.0254
         },
         {
-            testName: "Factorial Int",
-            testValue: '5',
-            expectedValue: 120
+            name: "Factorial Int",
+            value: '5',
+            expected: 120
         },
         // Factorial Float requires advanced mathematical knowledge
         {
-            testName: "Percentage [Int] Conversion",
-            testValue: '150%',
-            expectedValue: 1.5
+            name: "Percentage [Int] Conversion",
+            value: '150%',
+            expected: 1.5
         },
         {
-            testName: "Percentage [Float] Conversion",
-            testValue: '150.1%',
-            expectedValue: 1.501
-        },
-        // {
-        //     testName: "Pi Constant",
-        //     testValue: 'π',
-        //     expectedValue: 3.1416
-        // },
-        // {
-        //     testName: "Euler's Constant",
-        //     testValue: 'e',
-        //     expectedValue: 2.7183
-        // },
-        // By default, degrees is utilized for trigonometric functions
-        {
-            testName: "Sine [Int]",
-            testValue: 'sin(90)',
-            expectedValue: 1
+            name: "Percentage [Float] Conversion",
+            value: '150.1%',
+            expected: 1.501
         },
         {
-            testName: "Sine [Float]",
-            testValue: 'sin(45.2)',
-            expectedValue: 0.7095
+            name: "Pi Constant",
+            value: 'π',
+            expected: 3.1416
         },
         {
-            testName: "Cosine [Int]",
-            testValue: 'cos(360)',
-            expectedValue: 1
+            name: "Euler's Constant",
+            value: 'e',
+            expected: 2.7183
+        },
+        //By default, radian is utilized for trigonometric functions
+        {
+            name: "Sine [Int]",
+            value: 'sin(90)',
+            expected: 1
         },
         {
-            testName: "Cosine [Float]",
-            testValue: 'cos(45.2)',
-            expectedValue: 0.7046
+            name: "Sine [Float]",
+            value: 'sin(45.2)',
+            expected: 0.7095
         },
         {
-            testName: "Tangent [Int]",
-            testValue: 'tan(45)',
-            expectedValue: 1
+            name: "Cosine [Int]",
+            value: 'cos(360)',
+            expected: 1
         },
         {
-            testName: "Tangent [Int]",
-            testValue: 'tan(45.2)',
-            expectedValue: 1.007
+            name: "Cosine [Float]",
+            value: 'cos(45.2)',
+            expected: 0.7046
         },
         {
-            testName: "Log [Int]",
-            testValue: 'log(1000)',
-            expectedValue: 3
+            name: "Tangent [Int]",
+            value: 'tan(45)',
+            expected: 1
         },
         {
-            testName: "Log [Float]",
-            testValue: 'log(45.2)',
-            expectedValue: 1.6551
+            name: "Tangent [Int]",
+            value: 'tan(45.2)',
+            expected: 1.007
         },
         {
-            testName: "Natural Log [Int]",
-            testValue: 'ln(2)',
-            expectedValue: 0.6931
+            name: "Log [Int]",
+            value: 'log(1000)',
+            expected: 3
         },
         {
-            testName: "Natural Log [Float]",
-            testValue: 'ln(45.2)',
-            expectedValue: 3.8111
+            name: "Log [Float]",
+            value: 'log(45.2)',
+            expected: 1.6551
+        },
+        {
+            name: "Natural Log [Int]",
+            value: 'ln(2)',
+            expected: 0.6931
+        },
+        {
+            name: "Natural Log [Float]",
+            value: 'ln(45.2)',
+            expected: 3.8111
         }
     ];
     for (let i = 0; i < testCases.length; i++) { //assert.equal(true, true) //passed the test
-        it(testCases[i].testName, function() {
-            assert.equal(prioritise(testCases[i].testValue), testCases[i].expectedValue, "Expected prioritise(" + testCases[i].testValue + ") to return " + testCases[i].expectedValue);
+        it(testCases[i].name, function() {
+            assert.equal(prioritise(testCases[i].value), testCases[i].expected, "Expected prioritise(" + testCases[i].value + ") to return " + testCases[i].expected);
         });
     }
 });
@@ -219,159 +192,384 @@ describe.skip("INDIVIDUAL FUNCTION TESTS =>", function() {
 describe.skip("POWER INDEX TESTS =>", function() {
     // all decimal values are kept to 4 d.p.
     const testCases = [{
-            testName: "Power Base [Int] Index [Int]",
-            testValue: "2^3",
-            expectedValue: 8
+            name: "Power Base [Int] Index [Int]",
+            value: "2^3",
+            expected: 8
         },
         {
-            testName: "Power Base [Float] Index [Float]",
-            testValue: "2.5^3.1",
-            expectedValue: 17.1243
+            name: "Power Base [Float] Index [Float]",
+            value: "2.5^3.1",
+            expected: 17.1243
         },
         {
-            testName: "Power Base Multiple Index [Float]",
-            testValue: "2.5^3.1^1.7",
-            expectedValue: 529.0930
+            name: "Power Base Multiple Index [Float]",
+            value: "2.5^3.1^1.7",
+            expected: 529.0930
         },
         {
-            testName: "Power Base Multiple Index [Float]",
-            testValue: "2.5^3.1^1.7",
-            expectedValue: 529.0930
+            name: "Power Base Multiple Index [Float]",
+            value: "2.5^3.1^1.7",
+            expected: 529.0930
         },
         {
-            testName: "Square Root [Int]",
-            testValue: "4^0.5",
-            expectedValue: 2
+            name: "Square Root [Int]",
+            value: "4^0.5",
+            expected: 2
         },
         {
-            testName: "Square Root [Float]",
-            testValue: "45.2^0.5",
-            expectedValue: 6.7231
+            name: "Square Root [Float]",
+            value: "45.2^0.5",
+            expected: 6.7231
         },
         {
-            testName: "Exponent [Int]",
-            testValue: "10 ^ 2",
-            expectedValue: 100
+            name: "Exponent [Int]",
+            value: "10 ^ 2",
+            expected: 100
         },
         {
-            testName: "Exponent [Float]",
-            testValue: "10^0.6",
-            expectedValue: 3.9811
+            name: "Exponent [Float]",
+            value: "10^0.6",
+            expected: 3.9811
         }
     ];
     for (let i = 0; i < testCases.length; i++) { //assert.equal(true, true) //passed the test
-        it(testCases[i].testName, function() {
-            assert.equal(prioritise(testCases[i].testValue), testCases[i].expectedValue, "Expected prioritise(" + testCases[i].testValue + ") to return " + testCases[i].expectedValue);
+        it(testCases[i].name, function() {
+            assert.equal(prioritise(testCases[i].value), testCases[i].expected, "Expected prioritise(" + testCases[i].value + ") to return " + testCases[i].expected);
         });
     }
 });
 
-describe.only("SINGULAR GROUPS - 2 FEATURE COMBINATION TESTS     =>", function() {
-    // all decimal values are kept to 4 d.p.
+describe.skip("2 COMBINATION FEATURES =>", function() {
 
-    // Doc Info - 10/09/2017 - 22:25
-    // 12 Test cases
-    /*
-    Below denotes testable groups
-
-    1) Factor - Factorial + Percentages - whether a factorial/percentage is used, a test can be used to test for both.
-    2) Func - Functions - sine, cosine, tangent, natural-log or log
-    3) Power - Power functions
-    4) Arith - Arithmetic operators
-    *5) Brackets - need to know how bracket can play into this. We are always going place brackets in 
-    *6) π and e - I am ruling these out, as they are precedence independent
-
-    In this case 2 features.name combinations, consists of a combination of any of these 2 testable groups
-    */
-
-    //>>>>>>>> Need to use the testGroup const
-
-    // Set tests
+    // Set Tests
     const testCases = [{
-        testName: "Factor + Func",
-        testValue: "log(10!)",
-        expectedValue: 6.5598
+        name: "Factor + Func",
+        value: "log(10!)",
+        expected: 6.5598
     }];
-    for (let i = 0; i < testCases.length; i++) { //assert.equal(true, true) //passed the test
-        it(testCases[i].testName, function() {
-            assert.equal(prioritise(testCases[i].testValue), testCases[i].expectedValue, "Expected prioritise(" + testCases[i].testValue + ") to return " + testCases[i].expectedValue);
+    for (let i = 0; i < testCases.length; i++) {
+        it(testCases[i].name, function() {
+            assert.equal(prioritise(testCases[i].value), testCases[i].expected);
         });
     }
+    // Random Tests
+    const randomTestCase = 9;
 
-    // randomised test
-    // It should be a good idea to check for any repetition, 
-    // if any 2 function that have been used twice
-
-    // >>>>>>>> All code below this learn need fixing
     const randomTestGroup = () => {
         const testGroup = [
-            { unitName: "Factor", testUnit: ["!", "%"] },
-            { unitName: "Func", testUnit: ["sin(", "cos(", "tan(", "ln(", "log("] },
-            { unitName: "Power", testUnit: ["^"] },
-            { unitName: "Arith", testUnit: ["+", "-", "*", "/"] }
+            { unitName: "Factor", testUnit: ["!", "%"], method: [factorial, percentage] },
+            { unitName: "Func", testUnit: ["sin(", "cos(", "tan(", "ln(", "log("], method: [Math.sin, Math.cos, Math.tan, Math.log, Math.log10] },
+            { unitName: "Power", testUnit: ["^"], method: [Math.pow] },
+            { unitName: "Arith", testUnit: ["+", "-", "*", "/"], method: [] }
         ];
         let i = Math.floor(Math.random() * testGroup.length);
         let j = Math.floor(Math.random() * testGroup[i].testUnit.length)
         return {
             name: testGroup[i].unitName,
-            unit: testGroup[i].testUnit[j]
+            unit: testGroup[i].testUnit[j],
+            method: testGroup[i].method[j]
         }
     }
 
-    const createTestValue = () => {
-        let i = 0;
-        let j = 0;
-        let endStr = "";
-        let featureNames = [];
-        let value = [...Array(6).keys()].map(x => { return "" + Math.floor(Math.random() * 20 + 1); })
-        let feature = [...Array(6).keys()].map(x => { return randomTestGroup(); })
-        let testValue = () => {
+    const createTestCase = () => {
+            let halfChance = Math.random() > .5 ? true : false;
 
-            switch (feature[i].name) {
-                case "Factor":
-                    endStr === "" ? endStr = value[i] + feature[i].unit :
-                        endStr + feature[i].unit;
-                    i++;
-                    break;
-                case "Func":
-                    endStr === "" ? endStr = feature[i].unit + value[i] + ")" :
-                        endStr = feature[i].unit + endStr + ")"
-                    i++;
-                    break;
-                case "Power":
-                    endStr === "" ? endStr = value[i] + feature[i].unit + value[++i] :
-                        endStr = endStr + feature[i].unit + value[i];
-                    i++;
-                    break;
-                case "Arith":
-                    endStr === "" ? endStr = value[i] + " " + feature[i].unit + " " + value[++i] :
-                        endStr = endStr + " " + feature[i].unit + " " + value[i];
-                    i++;
-                    break;
-            }
-            featureNames.push(feature[i]);
-            j++;
-            if (j == 3) {
-                return [featureNames[0], featureNames[1], endStr];
+            //[feature + value counter, numerical value calculated]
+            let [i, calculateTotal] = [0, 0];
+
+            // toggles the amount of feature per test
+            let k = 2;
+
+            // You can toggle angle from Radians to Angle; vice versa
+            let angleUnits = toggleAngle("Radian");
+
+            // Description of each test case
+            let endStr = "";
+
+            // Produce sets of random Values and random functions to pick from 
+            let value = [...Array(6).keys()].map(x => { return Math.floor(Math.random() * 20 + 1); });
+            let feature = [...Array(6).keys()].map(x => { return randomTestGroup(); });
+
+            // used to;
+            // a) append possible combinations as strings
+            // b) calculate the end numerical value
+            let testValue = () => {
+                switch (feature[i].name) {
+                    case "Factor":
+                        // a! or (a + b)!
+                        endStr === "" ? endStr = value[i] + feature[i].unit : endStr = "(" + endStr + ")" + feature[i].unit;
+                        calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i]) : calculateTotal = feature[i].method(calculateTotal);
+                        i++;
+                        break;
+                    case "Func":
+                        // f(x)
+                        endStr === "" ? endStr = feature[i].unit + value[i] + ")" : endStr = feature[i].unit + endStr + ")";
+                        if (feature[i].unit === "sin(" || feature[i].unit === "cos(" || feature[i].unit === "tan(") {
+                            calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(angleUnits * value[i]) : calculateTotal = feature[i].method(angleUnits * calculateTotal);
+                            i++;
+                        } else {
+                            calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i]) : calculateTotal = feature[i].method(calculateTotal);
+                            i++;
+                        }
+                        break;
+                    case "Power":
+                        // a ^ y or (a + b) ^ y
+                        endStr === "" ? endStr = value[i] + feature[i].unit + value[i + 1] : endStr = "(" + endStr + ")" + feature[i].unit + value[i + 1];
+                        calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i], value[i + 1]) : calculateTotal = feature[i].method(calculateTotal, value[i + 1]);
+                        i++;
+                        break;
+                    case "Arith":
+                        // You can get a + b or b + a combinations, where '+' is also representative of the other arithmetic operators '-', '*', '/' 
+                        if (endStr === "") {
+                            endStr = value[i] + " " + feature[i].unit + " " + value[i + 1];
+                        } else {
+                            halfChance ? endStr = endStr + " " + feature[i].unit + " " + value[i + 1] : endStr = value[i + 1] + " " + feature[i].unit + " " + endStr;
+                        }
+                        if (calculateTotal === 0) {
+                            calculateTotal = value[i] + feature[i].unit + value[i + 1]
+                        } else {
+                            halfChance ? calculateTotal = calculateTotal + feature[i].unit + value[i + 1] : calculateTotal = value[i + 1] + feature[i].unit + calculateTotal;
+                        }
+                        i++;
+                        break;
+                }
+
+                // As Arithmetic operators are calculated last
+                if (feature[i + 1].name !== "Arith") {
+                    calculateTotal = eval(calculateTotal);
+                }
+
+                // These tests require a combination of 2, meaning other features, for this current test
+                return i === k ? [feature[0], feature[1], feature[2], endStr, eval(calculateTotal)] : testValue();
             }
             return testValue();
         }
-        return testValue();
-    }
-    const randomTestCases = [{
-            testName: "" + createTestValue()[0] + createTestValue()[1],
-            testValue: createTestValue()[2],
-            expectedValue: 6.5598
-        },
-        {
-            testName: "" + createTestValue()[0] + createTestValue()[1],
-            testValue: createTestValue()[2],
-            expectedValue: 6.5598
-        }
-    ];
-    for (let i = 0; i < randomTestCases.length; i++) {
-        it(randomTestCases[i].testName, function() {
-            assert.equal(prioritise(randomTestCases[i].testValue), randomTestCases[i].expectedValue);
+        // this cycles generated values
+    for (let i = 0; i < randomTestCase; i++) {
+        let storeValue = createTestCase();
+        const testCase = {
+            name: JSON.stringify(storeValue[0].name) + " & " + JSON.stringify(storeValue[1].name),
+            value: storeValue[2],
+            expected: storeValue[3]
+        };
+        it(testCase.name, function() {
+            assert.equal(prioritise(testCase.value), testCase.expected);
         });
     }
 });
+
+describe.only("3 COMBINATION FEATURES =>", function() {
+
+    // Set Tests
+    const testCases = [{
+        name: "Factor + Func",
+        value: "log(10!)",
+        expected: 6.5598
+    }];
+    for (let i = 0; i < testCases.length; i++) {
+        it(testCases[i].name, function() {
+            assert.equal(prioritise(testCases[i].value), testCases[i].expected);
+        });
+    }
+    // Random Tests
+    const randomTestCase = 300;
+
+    const testGroup = [
+        { unitName: "Factor", testUnit: ["!", "%"], method: [factorial, percentage] },
+        { unitName: "Func", testUnit: ["sin(", "cos(", "tan(", "ln(", "log("], method: [Math.sin, Math.cos, Math.tan, Math.log, Math.log10] },
+        { unitName: "Power", testUnit: ["^"], method: [Math.pow] },
+        { unitName: "Arith", testUnit: ["+", "-", "*", "/"], method: [] }
+    ];
+    const randomTestGroup = () => {
+        let i = Math.floor(Math.random() * testGroup.length);
+        let j = Math.floor(Math.random() * testGroup[i].testUnit.length)
+        return {
+            name: testGroup[i].unitName,
+            unit: testGroup[i].testUnit[j],
+            method: testGroup[i].method[j]
+        }
+    }
+
+    const createTestCase = () => {
+            let halfChance = Math.random() > .5 ? true : false;
+
+            //[feature + value counter, numerical value calculated]
+            let [i, calculateTotal] = [0, 0];
+
+            // toggles the amount of feature per test
+            let k = 3;
+
+            // You can toggle angle from Radians to Angle; vice versa
+            let angleUnits = toggleAngle("Radian");
+
+            // Description of each test case
+            let endStr = "";
+
+            // Produce sets of random Values and random functions to pick from 
+            let value = [...Array(6).keys()].map(x => { return Math.floor(Math.random() * 20 + 1); });
+            let feature = [...Array(6).keys()].map(x => { return randomTestGroup(); });
+
+            // used to;
+            // a) append possible combinations as strings
+            // b) calculate the end numerical value
+            let testValue = () => {
+                switch (feature[i].name) {
+                    case "Factor":
+                        // a! or (a + b)!
+                        endStr === "" ? endStr = value[i] + feature[i].unit : endStr = "(" + endStr + ")" + feature[i].unit;
+                        calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i]) : calculateTotal = feature[i].method(calculateTotal);
+                        break;
+                    case "Func":
+                        // f(x)
+                        endStr === "" ? endStr = feature[i].unit + value[i] + ")" : endStr = feature[i].unit + endStr + ")";
+                        if (feature[i].unit === "sin(" || feature[i].unit === "cos(" || feature[i].unit === "tan(") {
+                            calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(angleUnits * value[i]) : calculateTotal = feature[i].method(angleUnits * calculateTotal);
+                        } else {
+                            calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i]) : calculateTotal = feature[i].method(calculateTotal);
+                        }
+                        break;
+                    case "Power":
+                        // a ^ y or (a + b) ^ y
+                        endStr === "" ? endStr = value[i] + feature[i].unit + value[i + 1] : endStr = "(" + endStr + ")" + feature[i].unit + value[i + 1];
+                        calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i], value[i + 1]) : calculateTotal = feature[i].method(calculateTotal, value[i + 1]);
+                        break;
+                    case "Arith":
+                        // You can get a + b or b + a combinations, where '+' is also representative of the other arithmetic operators '-', '*', '/' 
+                        if (endStr === "") {
+                            endStr = value[i] + " " + feature[i].unit + " " + value[i + 1];
+                        } else {
+                            endStr = endStr + " " + feature[i].unit + " " + value[i];
+                        }
+                        if (calculateTotal === 0) {
+                            calculateTotal = value[i] + feature[i].unit + value[i + 1]
+                        } else {
+                            calculateTotal = calculateTotal + feature[i].unit + value[i];
+                        }
+                        if (feature[i + 1].name !== "Arith") {
+                            calculateTotal = eval(calculateTotal);
+                        }
+                        break;
+                }
+
+                // As Arithmetic operators are calculated last
+                i++;
+                // These tests require a combination of 2, meaning other features, for this current test
+                return i === k ? [feature[0], feature[1], feature[2], endStr, eval(calculateTotal)] : testValue();
+            }
+            return testValue();
+        }
+        // this cycles generated values
+    for (let j = 0; j < randomTestCase; j++) {
+        let storeValue = createTestCase();
+        const testCase = {
+            name: JSON.stringify(storeValue[0].name) + " + " + JSON.stringify(storeValue[1].name) + " + " + JSON.stringify(storeValue[2].name),
+            value: storeValue[3],
+            expected: storeValue[4]
+        };
+        it(testCase.name, function() {
+            assert.equal(prioritise(testCase.value), testCase.expected);
+        });
+    }
+});
+
+describe.skip("SPECIFIC FEATURE =>", function() {
+
+    const testGroup = [
+        { unitName: "Factor", testUnit: ["!", "%"], method: [factorial, percentage] },
+        { unitName: "Func", testUnit: ["sin(", "cos(", "tan(", "ln(", "log("], method: [Math.sin, Math.cos, Math.tan, Math.log, Math.log10] },
+        { unitName: "Power", testUnit: ["^"], method: [Math.pow] },
+        { unitName: "Arith", testUnit: ["+", "-", "*", "/"], method: [] }
+    ];
+    let calculateTotal = 0;
+
+    const createTestCase = () => {
+        let angleUnits = toggleAngle("Radian");
+        let i = 0;
+        let k = 3;
+        let value = [4, 12, 2];
+        let feature = [{
+                name: testGroup[3].unitName,
+                unit: testGroup[3].testUnit[0],
+                method: testGroup[3].method[0]
+            },
+            {
+                name: testGroup[1].unitName,
+                unit: testGroup[1].testUnit[1],
+                method: testGroup[1].method[1]
+            },
+            {
+                name: testGroup[3].unitName,
+                unit: testGroup[3].testUnit[1],
+                method: testGroup[3].method[1]
+            },
+            {
+                name: testGroup[1].unitName,
+                unit: testGroup[1].testUnit[1],
+                method: testGroup[1].method[1]
+            }
+        ]
+
+
+        let testValue = () => {
+            switch (feature[i].name) {
+                case "Factor":
+                    // a! or (a + b)!
+                    calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i]) : calculateTotal = feature[i].method(calculateTotal);
+                    break;
+                case "Func":
+                    // f(x)
+                    if (feature[i].unit === "sin(" || feature[i].unit === "cos(" || feature[i].unit === "tan(") {
+                        calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(angleUnits * value[i]) : calculateTotal = feature[i].method(angleUnits * calculateTotal);
+                    } else {
+                        calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i]) : calculateTotal = feature[i].method(calculateTotal);
+                    }
+                    break;
+                case "Power":
+                    // a ^ y or (a + b) ^ y
+                    calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i], value[i + 1]) : calculateTotal = feature[i].method(calculateTotal, value[i + 1]);
+                    break;
+                case "Arith":
+                    // You can get a + b or b + a combinations, where '+' is also representative of the other arithmetic operators '-', '*', '/' 
+                    if (calculateTotal === 0) {
+                        calculateTotal = value[i] + feature[i].unit + value[i + 1]
+                    } else {
+                        calculateTotal = calculateTotal + feature[i].unit + value[i];
+                        console.log(calculateTotal)
+                    }
+                    break;
+            }
+            if (feature[i + 1].name !== "Arith") {
+                calculateTotal = eval(calculateTotal);
+            }
+            i++;
+            return i == k ? calculateTotal : testValue();
+        }
+        return testValue();
+    }
+    let newCase = createTestCase();
+
+    const testCase = {
+        name: "Fix Error => 'cos(4 + 12) - 2' to equal NaN",
+        value: "'cos(4 + 12) - 2'",
+        expected: newCase
+    };
+    it(testCase.name, function() {
+        assert.equal(prioritise(testCase.value), testCase.expected);
+    });
+});
+
+// Specific case tester is required, to re test one specific case
+// thus working backwards, there would be a need for a dynamically made tests
+// -subtract for(), createTestCase(), testCase Object Props
+// keeping some of the logic behind - 
+// As I am just testing a specific case, the plan is remove randomisation entirely
+
+// Was thinking... how is this different from set test cases, 
+// set test cases are simple, you entire strings and you have to calculate the return value before hand
+// Whereas I have already set up some code aside for calculating the expected value
+
+
+/* 
+endStr === "" ? endStr = value[i] + feature[i].unit + value[i + 1] : endStr = "(" + endStr + ")" + feature[i].unit + value[i + 1];
+calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i], value[i + 1]) : calculateTotal = feature[i].method(calculateTotal, value[i + 1]);
+*/

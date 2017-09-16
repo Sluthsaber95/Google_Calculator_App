@@ -148,7 +148,184 @@ Sound/Noise
     dot - test you approximately where all the test are
 
 -------------------------------------------------------------------------------------
-Doc Info - 11/09/2017 - 12:44
+Doc Info - 16/09/2017 - 15:07
+-------------------------------------------------------------------------------------
+
+TESTS
+Manage to complete the "SPECIFIC FEATURE" Test. Which helped me to fix that bug from => 15/09/2017 - 17:50, 
+really happy that I managed to solve a problem with 2 birds one stone. So as all the tests have been completed,
+the next tasks will be refactor the entire code base, check over and comment on specific parts. The start making the 
+application.
+
+-------------------------------------------------------------------------------------
+Doc Info - 15/09/2017 - 16:03 - 15/09/2017 - 23:18
+-------------------------------------------------------------------------------------
+
+TESTS
+Nice! Finished "2 feature combination tests" and managed to arrange the random generation so that both "y + f(x)" and "f(x) + y", where "+" operator resemble any of the 
+current 4 arithmetic operators.
+So in theory, creating a "3 feature combination tests" should take under 5 mins, however before I do that, time should be spent refactoring the entire file.
+
+Refactor Before 432 lines, and everything is readable.
+
+-----------------------------
+Doc Info - 15/09/2017 - 16:03
+-----------------------------
+
+TESTS
+
+After Refactoring period 432 -> 356. Code is easier to read + comments. These aren't the best quantifiers, but it is a start.
+1) Finished refactoring my code
+2) Finished creating the 3 feature combination tests
+
+The last that is required is to remove the floating point errors from the code.
+
+Currently done a simply test with 
+
+0.2 + 0.4 = 0.6000000000000001
+0.2 * 0.4 = 0.08000000000000002
+a nice way to get rid of this is through use of multiplication, in this case any other integer, I used 10 as it easiest to follow
+
+((0.2 * 10) + (0.4 * 10))/ 10 = 0.6
+((0.2 * 10) * (0.4 * 10))/ 10 = 0.08
+
+However I'm gonna run through a randomized sample of 100, and check if there is any floating point errors as previous.
+
+-----------------------------
+Doc Info - 15/09/2017 - 17:50
+-----------------------------
+
+Still found some mistakes. Will note them down here.
+'cos(4 + 12) - 2' to equal NaN
+'(15 - cos(12))%' to equal NaN
+'(17 * 3 * 16)^12' to equal NaN
+'(5 - 20^17)^6' to equal NaN
+'(4^9 - 19)!' to equal NaN
+'12 - log(5 + 15)' to equal NaN
+'log(sin(18)) - 12' to equal NaN
+
+
+Includes an error - Invalid left-hand side expression in postfix operation?
+
+Some mistakes require me to advance my current mathematical knowledge, such factorial floats. So in the meantime they cannot yet be 
+fixed.
+
+Pain Point - 
+
+-----------------------------
+Doc Info - 15/09/2017 - 20:15
+-----------------------------
+
+
+Solved the error - Includes an error - Invalid left-hand side expression in postfix operation?
+At some point the eval function would have had to experience.
+
+eval(3++4), which caused the error
+
+
+-----------------------------
+Doc Info - 15/09/2017 - 21:14
+-----------------------------
+
+Pain Points Description: X when I Y, as Z
+> It's annoying when I want to do selective testing, as what would happen is that I run the random tests.
+However there will still be errors. I've been ignoring this pain for some time now. I'm gonna find a way to make specified tests.
+
+The plan is to test for specific cases. Which can customized by the developer. As some test cases come back as incorrect, thus this specific
+test case can be examined for any faults; allows the developer underlying design of the tests more as well.  
+-----------------------------
+Doc Info - 15/09/2017 - 23:18
+-----------------------------
+Pain Points Description: X when I Y, as Z
+> It isn't pragmatic when I leave a Job unfinished and is not left in a nice position, as it would difficult to pick off.
+From when where I last left it.
+
+-------------------------------------------------------------------------------------
+Doc Info - 14/09/2017 - 20:37 => 15/09/2017 - 1:01
+-------------------------------------------------------------------------------------
+TESTS
+
+Time to go back to drawing board, so 2 things to keep a major eye on. 
+
+1) If it returns back the same number as the benchmark - i.e. Google calculator
+2) Whether the precedence of operation is correct
+
+So I've already tested all the functions in their individual groups, now lets test what happens when we mix
+and match each of these groups together.
+
+These is still small problem with floating point errors;
+
+-----------------------------
+Doc Info - 14/09/2017 - 20:37
+-----------------------------
+TESTS
+
+Yet another layer of complexity, apparently the answer that is returned is in radians. Meaning I should I have
+fully understood what the function was returning in the first place.
+
+
+-----------------------------
+Doc Info - 14/09/2017 - 16:26
+-----------------------------
+TESTS
+
+Just found out that console.log still fires even if it inside your describe.skip().
+
+Insight Points: X has been/could/would be more helpful, because/as Y
+Testing has been helpful, because I discovered so many cases, which were preconceived at the time
+> This is what came up "expected '3 - 7 * 7' to equal -28"
+> Which made me think what if you had a situation like this 9 + 50 - 5 * 6 / 2 => 44
+
+Break this problem down, into use cases, as I can relate to them
+
+f(x) can be any ln(x), sin(x), x!, x^y, these all happen before any arithmetic operator.
+
+So here is where we can use a condition, say we have x + y. If the next feature is f(x). We an calculate 
+f(x + y) => Z
+
+however if the next feature is arithmetic operator, x + y * z, then we halt the calculation.
+Again, if the next feature is an function 'f(x)'.
+
+So now we can declare a condition, where if the final feature utilized is a function.
+
+We can use the eval function to calculate x + y * z, eval(x + y * z) => a 
+f(a) => B
+
+functions need f(value) convert arithm string => value, whereas
+arith need a + b * c need more values added to the end via as string, so they would need to convert a value => arithm String
+
+
+if(feature[i + 1].name !== "Arith"){
+    calculate = eval(calculateTotal)
+}
+
+-----------------------------
+Doc Info - 14/09/2017 - 23:41
+-----------------------------
+
+TESTS
+We can make it a try catch, and whenever NaN is calculated, returned "Error".
+
+-----------------------------
+Doc Info - 14/09/2017 - 23:57
+-----------------------------
+
+TESTS
+Apparently all my tests work for "2 feature combination tests", I am gonna go through more and double check over these test.
+And test for Radians => Degs
+
+-----------------------------
+Doc Info - 14/09/2017 - 23:57
+-----------------------------
+
+TESTS
+
+That's fine after my break I've managed to fix it, the issue with the degrees to radians from earlier.
+Still need to do more tests for "2 feature combination tests", should do that tomorrow. Plus it would be nice to add somethings such as 12 + f(x) as well, which I haven't done yet;
+
+
+-------------------------------------------------------------------------------------
+Doc Info - 11/09/2017 - 12:44 - WAS NEVER CLOSED
 -------------------------------------------------------------------------------------
 Pain Points Description: X when I Y
 It's starting to get annoying when you are testing things inside a file, as it gets really repetitive.
@@ -228,15 +405,6 @@ The main aim here is to gain some insight in how I can write the right code for 
 
 2) Another thing is that a lot of the code required to run test cases is repetitive. Thus should be refactor at the end
 of creating this singular testing group
-
-
-------------------
-11/09/2017 - 16:04
-------------------
-
-TEST
-
-1) another
 
 
 -------------------------------------------------------------------------------------
