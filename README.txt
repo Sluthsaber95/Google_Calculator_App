@@ -1,141 +1,3 @@
-Google Calculator Clone
-
-//////////////////////
-Meta:
-
-Planning: When planning the logic and architecture of the application, keep decomposing each step, until you can break into a smaller pieces. Good questions to ask yourself.
-What do you mean exactly by that?
-
-Pain Points Description: X is Y, because of Z
-X: Problem
-Y: Description of pain
-Z: Reason for Problem
-
-Insight Points: X has been helpful, because it can Y
-X: The topic being discussed
-Y: Reasons for the topic being helpful
-
-
-/////////////////////
-Pain points: I am only 60 lines into my code, and it is getting more and more complicated to add extra functionality to my application
-
-How to keep everything from being convoluted, with your inability to plan for the next fews step?
-
-- Document the application
-
-    - Discuss ways the javascript file should be written
-     - Document each function used - this in itself makes you think
-    - Think about ways to easily add additional features to the applications
-
-////////////////////
-Documentation
-
-Reasons making this application:
-
-A version of application already exists, so I have a form of a benchmark I can use to see how good my application is compared to an existing one. In this case it's the "Google Calculator Search Application"
-
-
-Spec Sheet
-
-Main Goal of application
-
-Use Cases
-As a user I can:
-    - do basic arithmetic on the calculator, and it should be a numerical value
-    - change radians to degree, vice versa, simply by clicking on the Rad/Deg toggle: 1 Radian -> 180/pi
-    - change return the factorial of a number: 5! -> 120
-    - use brackets to alter the precedence of the equation
-    - convert percentage value to a numerical value: 150% -> 1.5
-    - use the backspace key
-        1) to delete the previous value, if I already entered that value; acts like CE on any other calculator: 123 -> 12, 4ln(5) -> 4ln(5
-        2) to delete the entire value, after I have pressed the equals button; acts like the AC on any other calculator: 123 -> ""  , the "" depicts an empty string
-    - use sine button to calculate the value of sin(x): Degrees is toggled on, sin(360) -> 0
-    - use natural-log button to calculate the value of ln(x): ln(e) -> 1;
-    - use pi button to get the constant of pi: 3.14159
-    - use cosine button to calculate the value of cos(x): Degress is toggled on, cos(360) -> 1
-    - use logarithm button to calculate the value of log(x): log(10) -> 1;
-    - use e button to get the constant of e: 2.718281
-    - use tangent button to calculate the value of tan(x): tan(45) -> 1;
-    - use square root to calculate the value of x^1/2: 4^1/2 -> 2;
-    - use answer button to get the previous answer stated from before
-    - use exponential button to raise the exponent of base 10 10^y: 10^3 -> 1000;
-    - use power button to raise the exponent of any base x^y: 2^10 -> 1024;
-    - utilize the equals button, to return an answer
-
-Each use case is tested for
-    - precedence
-
-
-Now use cases will now be prioritised into groups
-
-
-    1) Basic functionality
-    -----------------------------------------------------------------------------
-    - utilize the equals button, to return an answer
-    - use answer button to get the previous answer stated from before   
-    - use the backspace key
-        a) to delete the previous value, if I already entered that value; acts like CE on any other calculator: 123 -> 12, 4ln(5) -> 4ln(5
-        b) to delete the entire value, after I have pressed the equals button; acts like the AC on any other calculator: 123 -> ""  , the "" depicts an empty string
-    - do basic arithmetic on the calculator, and it should be a numerical value
-    - use brackets to alter the precedence of the equation
-
-    2) Conversion and Basic Operation, and constants
-    -----------------------------------------------------------------------------
-    - convert radians to degree, vice versa, simply by clicking on the Rad/Deg toggle: 1 Radian -> 180/pi
-    - change return the factorial of a number: 5! -> 120
-    - convert percentage value to a numerical value: 150% -> 1.5
-    - use e button to get the constant of e: 2.718281
-    - use pi button to get the constant of pi: 3.14159
-
-    3) Passing numerical values through more complicated functions
-    -----------------------------------------------------------------------------
-    - use sine button to calculate the value of sin(x): Degrees is toggled on, sin(360) -> 0
-    - use natural-log button to calculate the value of ln(x): ln(e) -> 1;
-    - use cosine button to calculate the value of cos(x): Degress is toggled on, cos(360) -> 1
-    - use logarithm button to calculate the value of log(x): log(10) -> 1;
-    - use tangent button to calculate the value of tan(x): tan(45) -> 1;
-
-    4) Power, exponents and square root
-    -----------------------------------------------------------------------------
-    - use square root to calculate the value of x^1/2: 4^1/2 -> 2;
-    - use exponential button to raise the exponent of base 10 10^y: 10^3 -> 1000;
-    - use power button to raise the exponent of any base x^y: 2^10 -> 1024;
-
-
-
-
--------------------------------------------------------------------------------------
-Simple Plan
--------------------------------------------------------------------------------------
-Remember:
-Main Aim - is to replicate the entire calculator to the best of my ability
-
-- Configure a html and css clone of the Google Calculator
-- The order of precedence is seen as the biggest problem, the plan is do a few mathematical sum at the start, using a plethera of values from the buttons, to mix and match possible calculations
-- Current logic architecture
-    - Create a file system where you can;
-        - a file individual functions that can calculate the value
-        - a file to takes able to take into the value and process
-    - How each value will be processed
-        - Buttons assigned events
-            - describes how each button transcribes and store values in state
-                - [Any value/except equals, backspace, rad|deg, ans] button -> inputs a value into state that are recognisable by regex
-                - [equal] button is pressed -> state is casted into a string, regex is used to recognise specific parts of the string; regex will be used over and over again.
-                Where the highest order of precedence is detected by regex, and values converted to numerical values. -> this process occurs again, until every value is
-                converted to a string that can be processed by eval
-                - [backspace] button (below is copied and pasted from user stories, with some alterations)
-                    a) to delete the previous value, if I already entered that value; acts like CE on any other calculator: 123 -> 12, 4ln(5) -> 4ln(5
-                    b) to delete the entire value, after I have pressed the equals button; acts like the AC on any other calculator: 123 -> ""  , the "" depicts an empty string
-                - [rad|deg]toggle -> detects the use of sin, cos, tan, the alters the values within it's brackets
-                - [ans] button -> returns ans values on the screen and us -> places it back into state
-            - how those values will recognised by regex. Make it easier in sense where, if additional functionality, i.e. buttons were added, then how will this button fit into the applications
-        - Precedence of each function over another
-        - The end string state, must be able to process by eval, to spit out an answer
-- Enter tests for the entire calculator
-
-Discoveries
-- Whenever you input specific values, the value of precedent also depends on whether the value is left of the operator such as 5! or 5%
-
 -------------------------------------------------------------------------------------
 Improvements
 -------------------------------------------------------------------------------------
@@ -148,6 +10,84 @@ Sound/Noise
     dot - test you approximately where all the test are
 
 -------------------------------------------------------------------------------------
+Doc Info - 16/09/2017 - 21:49 -> 16/09/2017 - 22:32
+-------------------------------------------------------------------------------------
+
+Spent more than a couple of hours writing the logic after creating the tests. Also I've come up some ideas
+
+Insight Points: X has been/could/would be more helpful/useful, because/as Y
+> Jumbled random tests could be useful, as they test for false positives, because we can find out if the calculator will still give an answer, 
+even though the input is Invalid
+> We can optimise the factorial function, by figuring out what the highest factorial could react just beyond Number.MAX_VALUE.
+So that we can return infinity, without having to calculate that large number. Reason being because it require processor time.
+
+Regex values to detect certain part of the string. In the order of precedence; as it affects the way the regex matches.
+
+Factorials .5! or 1.5! or 3! => /([-+]?[0-9]*\.?[0-9]+[\!])/g
+
+Percentages .5% or 1.5% or 3% => /([-+]?[0-9]*\.?[0-9]+[\%])/g
+
+Power => 3^4 or 3^-0.4^0.4 => /([-+]?[0-9]*\.?[0-9]+[^])+([-+]?[0-9]*\.?[0-9]+)/g
+>> 3^4^4^4 converted to 3^(4^(4^4)) for calculating convenience ??????????????????????????
+Ruled out situations where Power will affected by any other group
+
+Functions =>  log(5.6) or cos(.5) or tan(-5)
+((?:ln)?(?:log)?(?:sin)?(?:cos)?(?:tan)?\([-+]?[0-9]*\.?[0-9]+\))
+
+May have individual ones where you can 
+
+Bracket + Arithmetic => (33*33-33+33) => /\(([-+]?[0-9]*\.?[0-9]+[\/\+\-\*])+([-+]?[0-9]*\.?[0-9]+)\)/g
+
+End Arithmetic Calculation => 33*33-33+33 /([-+]?[0-9]*\.?[0-9]+[\/\+\-\*])+([-+]?[0-9]*\.?[0-9]+)/g
+
+
+Note to self- the reason I didn't want to add a feature at a time, is that I would have had to change the entire configuration for every new 
+feature. Which would have been pretty annoying
+
+Possible Problem,
+> Keeping 1e+30 values with exponents, stored as Answer
+-------------------------------------------------------------------------------------
+Doc Info - 16/09/2017 - 17:58
+-------------------------------------------------------------------------------------
+
+Insight Points: X has been/could/would be more helpful, because/as Y
+
+Decided that optimising the app which would be more helpful, as it can return calculations fasters, and
+the entire process will be more efficient 
+
+
+-------------------------------------------------------------------------------------
+Doc Info - 16/09/2017 - 16:36
+-------------------------------------------------------------------------------------
+
+TESTS
+
+So these tests work;
+"BASIC ARITHMETIC TESTS =>"
+"INDIVIDUAL FUNCTION + CONSTANT TESTS =>"
+"POWER INDEX TESTS =>"
+"2 COMBINATION FEATURES =>"
+"3 COMBINATION FEATURES =>"
+"SPECIFIC FEATURE =>"
+
+Okay time to develop the app, all thunderbirds are go
+
+
+-------------------------------------------------------------------------------------
+Doc Info - 16/09/2017 - 16:24
+-------------------------------------------------------------------------------------
+
+Insight Points: X has been/could/would be more helpful, because/as Y
+> Testing has been really helpful, as whenever I decide to refactor, I can do so more confidently. So that when I break something,
+I can retrace my steps easily.
+
+TESTS
+
+I've decided to create some way to solve the floating point error, rather solving it as part of the tests.
+
+Time to go through each individual tests, one last time.
+
+-------------------------------------------------------------------------------------
 Doc Info - 16/09/2017 - 15:07
 -------------------------------------------------------------------------------------
 
@@ -156,6 +96,18 @@ Manage to complete the "SPECIFIC FEATURE" Test. Which helped me to fix that bug 
 really happy that I managed to solve a problem with 2 birds one stone. So as all the tests have been completed,
 the next tasks will be refactor the entire code base, check over and comment on specific parts. The start making the 
 application.
+
+Here is the documentation for it
+
+// Specific case tester is required, to re test one specific case
+// thus working backwards, there would be a need for a dynamically made tests
+// -subtract for(), createTestCase(), testCase Object Props
+// keeping some of the logic behind - 
+// As I am just testing a specific case, the plan is remove randomisation entirely
+
+// Was thinking... how is this different from set test cases, 
+// set test cases are simple, you entire strings and you have to calculate the return value before hand
+// Whereas I have already set up some code aside for calculating the expected value
 
 -------------------------------------------------------------------------------------
 Doc Info - 15/09/2017 - 16:03 - 15/09/2017 - 23:18
@@ -688,3 +640,143 @@ Doc Info - 09/09/2017 -  00:32
 // 1) There is some concern with regex literal, need to be careful and place some conditional cases for (\d+\.?\d+), what if the value is just an integer
 // 2) get rid of incrementer, place it within the function - stop it from polluting the global namespace
 
+--------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------
+Google Calculator Clone
+
+//////////////////////
+Meta:
+
+Planning: When planning the logic and architecture of the application, keep decomposing each step, until you can break into a smaller pieces. Good questions to ask yourself.
+What do you mean exactly by that?
+
+Pain Points Description: X is Y, because of Z
+X: Problem
+Y: Description of pain
+Z: Reason for Problem
+
+Insight Points: X has been helpful, because it can Y
+X: The topic being discussed
+Y: Reasons for the topic being helpful
+
+
+/////////////////////
+Pain points: I am only 60 lines into my code, and it is getting more and more complicated to add extra functionality to my application
+
+How to keep everything from being convoluted, with your inability to plan for the next fews step?
+
+- Document the application
+
+    - Discuss ways the javascript file should be written
+     - Document each function used - this in itself makes you think
+    - Think about ways to easily add additional features to the applications
+
+////////////////////
+Documentation
+
+Reasons making this application:
+
+A version of application already exists, so I have a form of a benchmark I can use to see how good my application is compared to an existing one. In this case it's the "Google Calculator Search Application"
+
+
+Spec Sheet
+
+Main Goal of application
+
+Use Cases
+As a user I can:
+    - do basic arithmetic on the calculator, and it should be a numerical value
+    - change radians to degree, vice versa, simply by clicking on the Rad/Deg toggle: 1 Radian -> 180/pi
+    - change return the factorial of a number: 5! -> 120
+    - use brackets to alter the precedence of the equation
+    - convert percentage value to a numerical value: 150% -> 1.5
+    - use the backspace key
+        1) to delete the previous value, if I already entered that value; acts like CE on any other calculator: 123 -> 12, 4ln(5) -> 4ln(5
+        2) to delete the entire value, after I have pressed the equals button; acts like the AC on any other calculator: 123 -> ""  , the "" depicts an empty string
+    - use sine button to calculate the value of sin(x): Degrees is toggled on, sin(360) -> 0
+    - use natural-log button to calculate the value of ln(x): ln(e) -> 1;
+    - use pi button to get the constant of pi: 3.14159
+    - use cosine button to calculate the value of cos(x): Degress is toggled on, cos(360) -> 1
+    - use logarithm button to calculate the value of log(x): log(10) -> 1;
+    - use e button to get the constant of e: 2.718281
+    - use tangent button to calculate the value of tan(x): tan(45) -> 1;
+    - use square root to calculate the value of x^1/2: 4^1/2 -> 2;
+    - use answer button to get the previous answer stated from before
+    - use exponential button to raise the exponent of base 10 10^y: 10^3 -> 1000;
+    - use power button to raise the exponent of any base x^y: 2^10 -> 1024;
+    - utilize the equals button, to return an answer
+
+Each use case is tested for
+    - precedence
+
+
+Now use cases will now be prioritised into groups
+
+
+    1) Basic functionality
+    -----------------------------------------------------------------------------
+    - utilize the equals button, to return an answer
+    - use answer button to get the previous answer stated from before   
+    - use the backspace key
+        a) to delete the previous value, if I already entered that value; acts like CE on any other calculator: 123 -> 12, 4ln(5) -> 4ln(5
+        b) to delete the entire value, after I have pressed the equals button; acts like the AC on any other calculator: 123 -> ""  , the "" depicts an empty string
+    - do basic arithmetic on the calculator, and it should be a numerical value
+    - use brackets to alter the precedence of the equation
+
+    2) Conversion and Basic Operation, and constants
+    -----------------------------------------------------------------------------
+    - convert radians to degree, vice versa, simply by clicking on the Rad/Deg toggle: 1 Radian -> 180/pi
+    - change return the factorial of a number: 5! -> 120
+    - convert percentage value to a numerical value: 150% -> 1.5
+    - use e button to get the constant of e: 2.718281
+    - use pi button to get the constant of pi: 3.14159
+
+    3) Passing numerical values through more complicated functions
+    -----------------------------------------------------------------------------
+    - use sine button to calculate the value of sin(x): Degrees is toggled on, sin(360) -> 0
+    - use natural-log button to calculate the value of ln(x): ln(e) -> 1;
+    - use cosine button to calculate the value of cos(x): Degress is toggled on, cos(360) -> 1
+    - use logarithm button to calculate the value of log(x): log(10) -> 1;
+    - use tangent button to calculate the value of tan(x): tan(45) -> 1;
+
+    4) Power, exponents and square root
+    -----------------------------------------------------------------------------
+    - use square root to calculate the value of x^1/2: 4^1/2 -> 2;
+    - use exponential button to raise the exponent of base 10 10^y: 10^3 -> 1000;
+    - use power button to raise the exponent of any base x^y: 2^10 -> 1024;
+
+
+
+
+-------------------------------------------------------------------------------------
+Simple Plan
+-------------------------------------------------------------------------------------
+Remember:
+Main Aim - is to replicate the entire calculator to the best of my ability
+
+- Configure a html and css clone of the Google Calculator
+- The order of precedence is seen as the biggest problem, the plan is do a few mathematical sum at the start, using a plethera of values from the buttons, to mix and match possible calculations
+- Current logic architecture
+    - Create a file system where you can;
+        - a file individual functions that can calculate the value
+        - a file to takes able to take into the value and process
+    - How each value will be processed
+        - Buttons assigned events
+            - describes how each button transcribes and store values in state
+                - [Any value/except equals, backspace, rad|deg, ans] button -> inputs a value into state that are recognisable by regex
+                - [equal] button is pressed -> state is casted into a string, regex is used to recognise specific parts of the string; regex will be used over and over again.
+                Where the highest order of precedence is detected by regex, and values converted to numerical values. -> this process occurs again, until every value is
+                converted to a string that can be processed by eval
+                - [backspace] button (below is copied and pasted from user stories, with some alterations)
+                    a) to delete the previous value, if I already entered that value; acts like CE on any other calculator: 123 -> 12, 4ln(5) -> 4ln(5
+                    b) to delete the entire value, after I have pressed the equals button; acts like the AC on any other calculator: 123 -> ""  , the "" depicts an empty string
+                - [rad|deg]toggle -> detects the use of sin, cos, tan, the alters the values within it's brackets
+                - [ans] button -> returns ans values on the screen and us -> places it back into state
+            - how those values will recognised by regex. Make it easier in sense where, if additional functionality, i.e. buttons were added, then how will this button fit into the applications
+        - Precedence of each function over another
+        - The end string state, must be able to process by eval, to spit out an answer
+- Enter tests for the entire calculator
+
+Discoveries
+- Whenever you input specific values, the value of precedent also depends on whether the value is left of the operator such as 5! or 5%

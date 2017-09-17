@@ -8,7 +8,7 @@ const factorial = num => {
     if (typeof num !== "number" || isNaN(num)) {
         return NaN;
     }
-    // the number is based on chromes MAX call stack 11034, firefox 50994
+    // The decision was to make the Max number of calls to the stack being under 10000, such as Chrome 11034, Firefox 50994
     else if (num > 10000) {
         return Infinity;
     }
@@ -23,17 +23,52 @@ const factorial = num => {
     };
     return calcFactorial(num);
 };
-
 const percentage = num => {
     return num / 100;
 }
-const prioritise = (str, propsName = []) => {
-    let i = 0;
-    return str;
+
+const storedFunction = {
+    "percentage": {
+        "regex": /(\d+%)/g, //1) 
+        "function": (match, p1) => {
+            return p1.slice(0, p1.length - 1) / 100;
+        }
+    },
+    "factorial": {
+        "regex": /(\d+!)/g,
+        "function": (match, p1) => {
+            return factorial(p1.slice(0, p1.length - 1));
+        }
+    },
+    "log": {
+        "regex": /(log\()(\d+\.?\d+)(\))/g,
+        "function": (match, p1, p2) => {
+            return Math.log10(p2);
+        }
+    },
+    "sine": {
+        "regex": /(sin\()(\d+\.?\d+)(\))/g,
+        "function": (match, p1, p2) => {
+            return Math.sin(p2);
+        }
+    }
 };
 
+const prioritise = (str, propsName) => {
+    let i = 0;
+    const prioritising = (str, propsName) => {
+        if (storedFunction[propsName[i]].regex.test(str)) {
+            str = str.replace(storedFunction[propsName[i]].regex, storedFunction[propsName[i]].function);
+            i === propsName.length - 1 ? i : i++;
+            return prioritising(str, propsName)
+        }
+        return str;
+    }
+    return prioritising(str, propsName);
+}
 
-describe.skip("BASIC ARITHMETIC TESTS =>", function() {
+
+describe.only("BASIC ARITHMETIC TESTS =>", function() {
     const testCases = [{
             name: "Addition [Int]",
             value: '3 + 4',
@@ -182,7 +217,7 @@ describe.skip("INDIVIDUAL FUNCTION + CONSTANT TESTS =>", function() {
             expected: 3.8111
         }
     ];
-    for (let i = 0; i < testCases.length; i++) { //assert.equal(true, true) //passed the test
+    for (let i = 0; i < testCases.length; i++) {
         it(testCases[i].name, function() {
             assert.equal(prioritise(testCases[i].value), testCases[i].expected, "Expected prioritise(" + testCases[i].value + ") to return " + testCases[i].expected);
         });
@@ -232,7 +267,7 @@ describe.skip("POWER INDEX TESTS =>", function() {
             expected: 3.9811
         }
     ];
-    for (let i = 0; i < testCases.length; i++) { //assert.equal(true, true) //passed the test
+    for (let i = 0; i < testCases.length; i++) {
         it(testCases[i].name, function() {
             assert.equal(prioritise(testCases[i].value), testCases[i].expected, "Expected prioritise(" + testCases[i].value + ") to return " + testCases[i].expected);
         });
@@ -272,79 +307,78 @@ describe.skip("2 COMBINATION FEATURES =>", function() {
     }
 
     const createTestCase = () => {
-            let halfChance = Math.random() > .5 ? true : false;
+        let halfChance = Math.random() > .5 ? true : false;
 
-            //[feature + value counter, numerical value calculated]
-            let [i, calculateTotal] = [0, 0];
+        //[feature + value counter, numerical value calculated]
+        let [i, calculateTotal] = [0, 0];
 
-            // toggles the amount of feature per test
-            let k = 2;
+        // toggles the amount of feature per test
+        let k = 2;
 
-            // You can toggle angle from Radians to Angle; vice versa
-            let angleUnits = toggleAngle("Radian");
+        // You can toggle angle from Radians to Angle; vice versa
+        let angleUnits = toggleAngle("Radian");
 
-            // Description of each test case
-            let endStr = "";
+        // Description of each test case
+        let endStr = "";
 
-            // Produce sets of random Values and random functions to pick from 
-            let value = [...Array(6).keys()].map(x => { return Math.floor(Math.random() * 20 + 1); });
-            let feature = [...Array(6).keys()].map(x => { return randomTestGroup(); });
+        // Produce sets of random Values and random functions to pick from 
+        let value = [...Array(6).keys()].map(x => { return Math.floor(Math.random() * 20 + 1); });
+        let feature = [...Array(6).keys()].map(x => { return randomTestGroup(); });
 
-            // used to;
-            // a) append possible combinations as strings
-            // b) calculate the end numerical value
-            let testValue = () => {
-                switch (feature[i].name) {
-                    case "Factor":
-                        // a! or (a + b)!
-                        endStr === "" ? endStr = value[i] + feature[i].unit : endStr = "(" + endStr + ")" + feature[i].unit;
+        // used to;
+        // a) append possible combinations as strings
+        // b) calculate the end numerical value
+        let testValue = () => {
+            switch (feature[i].name) {
+                case "Factor":
+                    // a! or (a + b)!
+                    endStr === "" ? endStr = value[i] + feature[i].unit : endStr = "(" + endStr + ")" + feature[i].unit;
+                    calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i]) : calculateTotal = feature[i].method(calculateTotal);
+                    i++;
+                    break;
+                case "Func":
+                    // f(x)
+                    endStr === "" ? endStr = feature[i].unit + value[i] + ")" : endStr = feature[i].unit + endStr + ")";
+                    if (feature[i].unit === "sin(" || feature[i].unit === "cos(" || feature[i].unit === "tan(") {
+                        calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(angleUnits * value[i]) : calculateTotal = feature[i].method(angleUnits * calculateTotal);
+                        i++;
+                    } else {
                         calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i]) : calculateTotal = feature[i].method(calculateTotal);
                         i++;
-                        break;
-                    case "Func":
-                        // f(x)
-                        endStr === "" ? endStr = feature[i].unit + value[i] + ")" : endStr = feature[i].unit + endStr + ")";
-                        if (feature[i].unit === "sin(" || feature[i].unit === "cos(" || feature[i].unit === "tan(") {
-                            calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(angleUnits * value[i]) : calculateTotal = feature[i].method(angleUnits * calculateTotal);
-                            i++;
-                        } else {
-                            calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i]) : calculateTotal = feature[i].method(calculateTotal);
-                            i++;
-                        }
-                        break;
-                    case "Power":
-                        // a ^ y or (a + b) ^ y
-                        endStr === "" ? endStr = value[i] + feature[i].unit + value[i + 1] : endStr = "(" + endStr + ")" + feature[i].unit + value[i + 1];
-                        calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i], value[i + 1]) : calculateTotal = feature[i].method(calculateTotal, value[i + 1]);
-                        i++;
-                        break;
-                    case "Arith":
-                        // You can get a + b or b + a combinations, where '+' is also representative of the other arithmetic operators '-', '*', '/' 
-                        if (endStr === "") {
-                            endStr = value[i] + " " + feature[i].unit + " " + value[i + 1];
-                        } else {
-                            halfChance ? endStr = endStr + " " + feature[i].unit + " " + value[i + 1] : endStr = value[i + 1] + " " + feature[i].unit + " " + endStr;
-                        }
-                        if (calculateTotal === 0) {
-                            calculateTotal = value[i] + feature[i].unit + value[i + 1]
-                        } else {
-                            halfChance ? calculateTotal = calculateTotal + feature[i].unit + value[i + 1] : calculateTotal = value[i + 1] + feature[i].unit + calculateTotal;
-                        }
-                        i++;
-                        break;
-                }
-
-                // As Arithmetic operators are calculated last
-                if (feature[i + 1].name !== "Arith") {
-                    calculateTotal = eval(calculateTotal);
-                }
-
-                // These tests require a combination of 2, meaning other features, for this current test
-                return i === k ? [feature[0], feature[1], feature[2], endStr, eval(calculateTotal)] : testValue();
+                    }
+                    break;
+                case "Power":
+                    // a ^ y or (a + b) ^ y
+                    endStr === "" ? endStr = value[i] + feature[i].unit + value[i + 1] : endStr = "(" + endStr + ")" + feature[i].unit + value[i + 1];
+                    calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i], value[i + 1]) : calculateTotal = feature[i].method(calculateTotal, value[i + 1]);
+                    i++;
+                    break;
+                case "Arith":
+                    // You can get a + b or b + a combinations, where '+' is also representative of the other arithmetic operators '-', '*', '/' 
+                    if (endStr === "") {
+                        endStr = value[i] + " " + feature[i].unit + " " + value[i + 1];
+                    } else {
+                        halfChance ? endStr = endStr + " " + feature[i].unit + " " + value[i + 1] : endStr = value[i + 1] + " " + feature[i].unit + " " + endStr;
+                    }
+                    if (calculateTotal === 0) {
+                        calculateTotal = value[i] + feature[i].unit + value[i + 1]
+                    } else {
+                        halfChance ? calculateTotal = calculateTotal + feature[i].unit + value[i + 1] : calculateTotal = value[i + 1] + feature[i].unit + calculateTotal;
+                    }
+                    i++;
+                    break;
             }
-            return testValue();
+
+            // As Arithmetic operators are calculated last
+            if (feature[i + 1].name !== "Arith") {
+                calculateTotal = eval(calculateTotal);
+            }
+
+            // These tests require a combination of 2, meaning other features, for this current test
+            return i === k ? [feature[0], feature[1], endStr, eval(calculateTotal)] : testValue();
         }
-        // this cycles generated values
+        return testValue();
+    }
     for (let i = 0; i < randomTestCase; i++) {
         let storeValue = createTestCase();
         const testCase = {
@@ -358,7 +392,7 @@ describe.skip("2 COMBINATION FEATURES =>", function() {
     }
 });
 
-describe.only("3 COMBINATION FEATURES =>", function() {
+describe.skip("3 COMBINATION FEATURES =>", function() {
 
     // Set Tests
     const testCases = [{
@@ -391,74 +425,71 @@ describe.only("3 COMBINATION FEATURES =>", function() {
     }
 
     const createTestCase = () => {
-            let halfChance = Math.random() > .5 ? true : false;
+        //[feature + value counter, numerical value calculated]
+        let [i, calculateTotal] = [0, 0];
 
-            //[feature + value counter, numerical value calculated]
-            let [i, calculateTotal] = [0, 0];
+        // toggles the amount of feature per test
+        let k = 3;
 
-            // toggles the amount of feature per test
-            let k = 3;
+        // You can toggle angle from Radians to Angle; vice versa
+        let angleUnits = toggleAngle("Radian");
 
-            // You can toggle angle from Radians to Angle; vice versa
-            let angleUnits = toggleAngle("Radian");
+        // Description of each test case
+        let endStr = "";
 
-            // Description of each test case
-            let endStr = "";
+        // Produce sets of random Values and random functions to pick from 
+        let value = [...Array(6).keys()].map(x => { return Math.floor(Math.random() * 20 + 1); });
+        let feature = [...Array(6).keys()].map(x => { return randomTestGroup(); });
 
-            // Produce sets of random Values and random functions to pick from 
-            let value = [...Array(6).keys()].map(x => { return Math.floor(Math.random() * 20 + 1); });
-            let feature = [...Array(6).keys()].map(x => { return randomTestGroup(); });
-
-            // used to;
-            // a) append possible combinations as strings
-            // b) calculate the end numerical value
-            let testValue = () => {
-                switch (feature[i].name) {
-                    case "Factor":
-                        // a! or (a + b)!
-                        endStr === "" ? endStr = value[i] + feature[i].unit : endStr = "(" + endStr + ")" + feature[i].unit;
+        // used to;
+        // a) append possible combinations as strings
+        // b) calculate the end numerical value
+        let testValue = () => {
+            switch (feature[i].name) {
+                case "Factor":
+                    // a! or (a + b)!
+                    endStr === "" ? endStr = value[i] + feature[i].unit : endStr = "(" + endStr + ")" + feature[i].unit;
+                    calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i]) : calculateTotal = feature[i].method(calculateTotal);
+                    break;
+                case "Func":
+                    // f(x)
+                    endStr === "" ? endStr = feature[i].unit + value[i] + ")" : endStr = feature[i].unit + endStr + ")";
+                    if (feature[i].unit === "sin(" || feature[i].unit === "cos(" || feature[i].unit === "tan(") {
+                        calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(angleUnits * value[i]) : calculateTotal = feature[i].method(angleUnits * calculateTotal);
+                    } else {
                         calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i]) : calculateTotal = feature[i].method(calculateTotal);
-                        break;
-                    case "Func":
-                        // f(x)
-                        endStr === "" ? endStr = feature[i].unit + value[i] + ")" : endStr = feature[i].unit + endStr + ")";
-                        if (feature[i].unit === "sin(" || feature[i].unit === "cos(" || feature[i].unit === "tan(") {
-                            calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(angleUnits * value[i]) : calculateTotal = feature[i].method(angleUnits * calculateTotal);
-                        } else {
-                            calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i]) : calculateTotal = feature[i].method(calculateTotal);
-                        }
-                        break;
-                    case "Power":
-                        // a ^ y or (a + b) ^ y
-                        endStr === "" ? endStr = value[i] + feature[i].unit + value[i + 1] : endStr = "(" + endStr + ")" + feature[i].unit + value[i + 1];
-                        calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i], value[i + 1]) : calculateTotal = feature[i].method(calculateTotal, value[i + 1]);
-                        break;
-                    case "Arith":
-                        // You can get a + b or b + a combinations, where '+' is also representative of the other arithmetic operators '-', '*', '/' 
-                        if (endStr === "") {
-                            endStr = value[i] + " " + feature[i].unit + " " + value[i + 1];
-                        } else {
-                            endStr = endStr + " " + feature[i].unit + " " + value[i];
-                        }
-                        if (calculateTotal === 0) {
-                            calculateTotal = value[i] + feature[i].unit + value[i + 1]
-                        } else {
-                            calculateTotal = calculateTotal + feature[i].unit + value[i];
-                        }
-                        if (feature[i + 1].name !== "Arith") {
-                            calculateTotal = eval(calculateTotal);
-                        }
-                        break;
-                }
-
-                // As Arithmetic operators are calculated last
-                i++;
-                // These tests require a combination of 2, meaning other features, for this current test
-                return i === k ? [feature[0], feature[1], feature[2], endStr, eval(calculateTotal)] : testValue();
+                    }
+                    break;
+                case "Power":
+                    // a ^ y or (a + b) ^ y
+                    endStr === "" ? endStr = value[i] + feature[i].unit + value[i + 1] : endStr = "(" + endStr + ")" + feature[i].unit + value[i + 1];
+                    calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i], value[i + 1]) : calculateTotal = feature[i].method(calculateTotal, value[i + 1]);
+                    break;
+                case "Arith":
+                    // You can get a + b or b + a combinations, where '+' is also representative of the other arithmetic operators '-', '*', '/' 
+                    if (endStr === "") {
+                        endStr = value[i] + " " + feature[i].unit + " " + value[i + 1];
+                    } else {
+                        endStr = endStr + " " + feature[i].unit + " " + value[i];
+                    }
+                    if (calculateTotal === 0) {
+                        calculateTotal = value[i] + feature[i].unit + value[i + 1]
+                    } else {
+                        calculateTotal = calculateTotal + feature[i].unit + value[i];
+                    }
+                    if (feature[i + 1].name !== "Arith") {
+                        calculateTotal = eval(calculateTotal);
+                    }
+                    break;
             }
-            return testValue();
+
+            // As Arithmetic operators are calculated last
+            i++;
+            // These tests require a combination of 2, meaning other features, for this current test
+            return i === k ? [feature[0], feature[1], feature[2], endStr, eval(calculateTotal)] : testValue();
         }
-        // this cycles generated values
+        return testValue();
+    }
     for (let j = 0; j < randomTestCase; j++) {
         let storeValue = createTestCase();
         const testCase = {
@@ -557,19 +588,3 @@ describe.skip("SPECIFIC FEATURE =>", function() {
         assert.equal(prioritise(testCase.value), testCase.expected);
     });
 });
-
-// Specific case tester is required, to re test one specific case
-// thus working backwards, there would be a need for a dynamically made tests
-// -subtract for(), createTestCase(), testCase Object Props
-// keeping some of the logic behind - 
-// As I am just testing a specific case, the plan is remove randomisation entirely
-
-// Was thinking... how is this different from set test cases, 
-// set test cases are simple, you entire strings and you have to calculate the return value before hand
-// Whereas I have already set up some code aside for calculating the expected value
-
-
-/* 
-endStr === "" ? endStr = value[i] + feature[i].unit + value[i + 1] : endStr = "(" + endStr + ")" + feature[i].unit + value[i + 1];
-calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i], value[i + 1]) : calculateTotal = feature[i].method(calculateTotal, value[i + 1]);
-*/

@@ -4,7 +4,7 @@
     "description": "Google Calculator Clone",
     "main": "JavaScript_Calculator.js",
     "scripts": {
-        "test": "mocha testFunctions --watch",
+        "test": "mocha regexTests --watch",
         "build": "babel src -d lib"
     },
     "repository": {
