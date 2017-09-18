@@ -10,6 +10,90 @@ Sound/Noise
     dot - test you approximately where all the test are
 
 -------------------------------------------------------------------------------------
+Doc Info - 18/09/2017 - 11:33 
+-------------------------------------------------------------------------------------
+
+-----------------------------
+Doc Info - 18/09/2017 - 14:57 
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+
+Before my tea break, found a regex function that would enable me to match the most inner bracket first
+\([^()"]*(?:"[^"]*"[^()"]*)*\)
+
+((("1"))(("2"))("3")) => `"1"` is picked
+(("1")(("2"))("3")) => `"1"` is picked again
+((("2"))("3")) => `"2"` is now picked 
+-----------------------------
+Doc Info - 18/09/2017 - 14:37 
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+
+Time to introduce Parenthesise into the equations for testing
+
+-----------------------------
+Doc Info - 18/09/2017 - 14:20 
+-----------------------------
+
+DESIGN
+
+Manage to almost create a complete replica - the shift of focus from TEST + APP DEV => DESIGN
+was due to the folks needing a mock image of it being use for "" ;
+
+Except for;
+Tactile Response
+> Button Hover Border
+> Calculator Hover -> Screen Border 
+> Calculator Focus -> Screen Border 
+
+Color schemes
+> Answer Div -> innerHTML of Ans is at the nearer to the bottom of the div container
+> Answer Div -> Font color should not be black and be a grayish color
+
+-----------------------------
+Doc Info - 18/09/2017 - 11:33
+-----------------------------
+
+DESIGN
+
+Time will placed aside to polish the look of the Google Calculator clone.
+
+-------------------------------------------------------------------------------------
+Doc Info - 17/09/2017 - 22:53 [End of Session]
+-------------------------------------------------------------------------------------
+
+TESTS + APP DEVELOPMENT
+
+Made a pretty big break through with testing
+
+Being able to test these combinations;
+
+Parenthesise + Arithmetic
+Factorial
+Multiple Factorials
+Percentage + Factorial
+Factorial + Percentage
+Factorial + Percentage + Arithmetic Assortment
+Simple Power
+Complex Power
+Factorial + Complex Power
+Percentage + Complex Power
+
+Which is incredible for 2 days of work
+
+1) Coding logic on paper
+2) Application development
+
+Which could mean it may have been a big waste of time, coding the tests the first place. 
+However this would not be conclusive evidence that testing was a waste of time. However I did gain 
+a lot of understanding the app I created via testing, with very useful insights such as grouping 
+the features in precedential groups, and learnt to do random dynamical test, but...
+
+Was it worth the time + effort - 9 days??
+
+-------------------------------------------------------------------------------------
 Doc Info - 16/09/2017 - 21:49 -> 16/09/2017 - 22:32
 -------------------------------------------------------------------------------------
 

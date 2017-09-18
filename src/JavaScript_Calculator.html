@@ -6,23 +6,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="JavaScript_Calculator.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 </head>
 
 <body>
     <div id="calculator">
         <div id="display">
-            <div id="answer"></div>
-            <div id="screen"></div>
+            <div id="answer">
+                <!-- <p> ln(e<sup>√(65536)</sup>) × 0.5 - 86 =</p> -->
+            </div>
+            <div id="screen">42
+                <!-- <div style="width: 25px"></div> -->
+            </div>
         </div>
         <div id="button-area">
             <div class="buttonDiv">
-                <button id="radians" class="btn btn-top-row" type="button">Rad</button>
-                <button id="degrees" class="btn btn-top-row" type="button">Deg</button>
+                <label class="switch">
+                            <input type="checkbox" checked>
+                            <div class="slider">
+                                    <div class="btn-angle">Rad</div>
+                                    <div class="btn-angle">Deg</div>
+                            </div>
+                          </label>
                 <button id="factorial" class="btn btn-top-row" type="button">x!</button>
                 <button id="left-bracket" class="btn btn-top-row" type="button">(</button>
                 <button id="right-bracket" class="btn btn-top-row" type="button">)</button>
                 <button id="percentage" class="btn btn-top-row" type="button">&#37</button>
-                <button id="backspace" class="btn btn-top-row" type="button">CE</button>
+                <button id="backspace" class="btn btn-erase" type="button">AC</button>
             </div>
             <div class="buttonDiv">
                 <button id="inverse" class="btn btn-top-row" type="button">lnv</button>
@@ -60,6 +70,9 @@
                 <button id="equal" class="btn" type="button">=</button>
                 <button id="add" class="btn btn-symbol" type="button">+</button>
             </div>
+        </div>
+        <div id="empty-space">
+
         </div>
     </div>
 </body>

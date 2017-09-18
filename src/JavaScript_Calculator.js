@@ -1,3 +1,9 @@
+(function() {
+    const toggleBtn = document.createElement("button");
+    toggleBtn.innerHTML = "Toggle Button";
+    document.appendChild(toggleBtn);
+})()
+
 const calculator = document.getElementById("calculator");
 const equal = document.getElementById("equal");
 let state = [];
