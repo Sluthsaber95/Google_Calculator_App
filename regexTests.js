@@ -131,96 +131,149 @@ const storedFunction = {
     }
 };
 
-const regexTrain = (str) => {
+const regexTrain = (string) => {
 
     let total = "";
     let endRegex = "";
     let newStr = "";
     let i = 0;
+    // there should be check here. As in are there any more bracketed values??
+    let str = "";
+    let bracketedValue = "";
+    string = string.replace(/[e]/g, Math.E).replace(/[π]/g, Math.PI);
     do {
-        //console.log(str);
-        i++;
-        if (storedFunction.factorial.regex.test(str)) {
-            factorialDetected = /([-+]?[0-9]*\.?[0-9]+[\!])/g [Symbol.match](str);
-            for (let j = 0; j < factorialDetected.length; j++) {
-                let value = /^([-+]?[0-9]*[\!])$/g.test(factorialDetected[j]) ? parseInt(/([-+]?[0-9]*[\!])/g.exec(factorialDetected[j])[0]) :
-                    parseFloat(/([-+]?[0-9]*\.?[0-9]+[\!])/g.exec(factorialDetected[j])[0]);
-                // console.log(value);
-                newStr = factorial(value) + "";
-                // console.log(newStr);
-                str = str.replace(/([0-9]*\.?[0-9]+[\!])/, newStr);
-            }
-            continue;
+        let functionUtilized = "";
+        if (/(ln|log|sin|cos|tan)\([^()"]*(?:"[^"]*"[^()"]*)*\)/g.test(string)) {
+            functionUtilized = /(ln|log|sin|cos|tan)\([^()"]*(?:"[^"]*"[^()"]*)*\)/g.exec(string)[1];
         }
-        if (storedFunction.percentage.regex.test(str)) {
-            percentageDetected = /([-+]?[0-9]*\.?[0-9]+[\%])/g [Symbol.match](str);
-            // console.log(percentageDetected)
-            for (let j = 0; j < percentageDetected.length; j++) {
-                let value = /^([-+]?[0-9]*[\%])$/g.test(str) ? parseInt(/([-+]?[0-9]*[\%])/g.exec(str)[0]) :
-                    parseFloat(/([-+]?[0-9]*\.?[0-9]+[\%])/g.exec(str)[0]);
-                newStr = value / 100 + "";
-                str = str.replace(/([-+]?[0-9]*\.?[0-9]+[\%])/g, newStr);
-                console.log(str);
-            }
-            continue;
-
+        if (/\([^()"]*(?:"[^"]*"[^()"]*)*\)/g.test(string)) {
+            bracketedValue = /\([^()"]*(?:"[^"]*"[^()"]*)*\)/g.exec(string)[0];
+            str = bracketedValue.slice(1, bracketedValue.length - 1);
+        } else {
+            str = string;
         }
-        // console.log(/^([-+]?[0-9]*\.?[0-9][\^])+([-+]?[0-9]*\.?[0-9])+$/g.test(str));
-        // console.log(str);
-        if (/^([-+]?[0-9]*\.?[0-9])+[^]+([-+]?[0-9]*\.?[0-9])+$/g.test(str) && !/\(?([-+]?[0-9]*\.?[0-9]+[\/\+\-\*])+([-+]?[0-9]*\.?[0-9]+)\)?/g.test(str)) {
-            // console.log("Regex not detected??")
-            exponentDetected = /([-+]?[0-9]*\.?[0-9]+)/g [Symbol.match](str);
-            exponentDetected = /([-+]?[0-9]*\.?[0-9]+)/g [Symbol.match](str);
-            for (let j = exponentDetected.length - 1; j > 0; j--) {
-                // console.log(j);
-                let exp = /^([-+]?[0-9]*[\%])$/g.test(exponentDetected[j]) ? parseInt(exponentDetected[j]) :
-                    parseFloat(exponentDetected[j]);
-                let base = /^([-+]?[0-9]*[\%])$/g.test(exponentDetected[j - 1]) ? parseInt(exponentDetected[j - 1]) :
-                    parseFloat(exponentDetected[j - 1]);
-                newStr = j == exponentDetected.length - 1 ? Math.pow(base, exp) : Math.pow(base, newStr);
-                if (j > 1) {
-                    continue;
+        do {
+            i++;
+            if (storedFunction.factorial.regex.test(str)) {
+                factorialDetected = /([-+]?[0-9]*\.?[0-9]+[\!])/g [Symbol.match](str);
+                for (let j = 0; j < factorialDetected.length; j++) {
+                    let value = /^([-+]?[0-9]*[\!])$/g.test(factorialDetected[j]) ? parseInt(/([-+]?[0-9]*[\!])/g.exec(factorialDetected[j])[0]) :
+                        parseFloat(/([-+]?[0-9]*\.?[0-9]+[\!])/g.exec(factorialDetected[j])[0]);
+                    // console.log(value);
+                    newStr = factorial(value) + "";
+                    // console.log(newStr);
+                    str = str.replace(/([0-9]*\.?[0-9]+[\!])/, newStr);
                 }
-                // console.log(newStr);
-                str = str.replace(/^([-+]?[0-9]*\.?[0-9])+[^]+([-+]?[0-9]*\.?[0-9])+$/g, newStr);
-                console.log(str);
+                continue;
             }
-            continue;
+            if (storedFunction.percentage.regex.test(str)) {
+                percentageDetected = /([-+]?[0-9]*\.?[0-9]+[\%])/g [Symbol.match](str);
+                // console.log(percentageDetected)
+                for (let j = 0; j < percentageDetected.length; j++) {
+                    let value = /^([-+]?[0-9]*[\%])$/g.test(str) ? parseInt(/([-+]?[0-9]*[\%])/g.exec(str)[0]) :
+                        parseFloat(/([-+]?[0-9]*\.?[0-9]+[\%])/g.exec(str)[0]);
+                    newStr = value / 100 + "";
+                    str = str.replace(/([-+]?[0-9]*\.?[0-9]+[\%])/g, newStr);
+                    console.log(str);
+                }
+                continue;
+            }
+            if (/^([-+]?[0-9]*\.?[0-9])+[^]+([-+]?[0-9]*\.?[0-9])+$/g.test(str) && !/\(?([-+]?[0-9]*\.?[0-9]+[\/\+\-\*])+([-+]?[0-9]*\.?[0-9]+)\)?/g.test(str) && !/^\d+\.\d+$/.test(str)) {
+                exponentDetected = /([-+]?[0-9]*\.?[0-9]+)/g [Symbol.match](str);
+                for (let j = exponentDetected.length - 1; j > 0; j--) {
+                    console.log(j);
+                    let exp = /^([-+]?[0-9]*[\%])$/g.test(exponentDetected[j]) ? parseInt(exponentDetected[j]) :
+                        parseFloat(exponentDetected[j]);
+                    let base = /^([-+]?[0-9]*[\%])$/g.test(exponentDetected[j - 1]) ? parseInt(exponentDetected[j - 1]) :
+                        parseFloat(exponentDetected[j - 1]);
+                    newStr = j == exponentDetected.length - 1 ? Math.pow(base, exp) : Math.pow(base, newStr);
+                    console.log(str);
+                    if (j > 1) {
+                        continue;
+                    }
+                    str = str.replace(/^([-+]?[0-9]*\.?[0-9])+[^]+([-+]?[0-9]*\.?[0-9])+$/g, newStr);
+                    console.log(str);
+                }
+                continue;
+            }
+            console.log("a");
+            console.log(str);
+
+            if (functionUtilized !== "") {
+
+                switch (functionUtilized) {
+                    case "ln":
+                        str = Math.log(str) + "";
+                        break;
+                    case "log":
+                        str = Math.log10(str) + "";
+                        break;
+                    case "sin":
+                        str = Math.sin(str) + "";
+                        break;
+                    case "cos":
+                        str = Math.cos(str) + "";
+                        break;
+                    case "tan":
+                        str = Math.tan(str) + "";
+                        break;
+                }
+                console.log(str);
+                str = str.replace(bracketedValue, str);
+                continue;
+            }
+            break;
         }
-        break;
-    }
-    while (!/^([-+]?[0-9]*\.*[0-9]+?)$/.test(str) || i == 3);
+        while (!/^([-+]?[0-9]*\.*[0-9]+?)$/.test(str) || i == 3);
+        string = string.replace(bracketedValue, str) // just use this method for now and we can think of functions after
+        if (/\([^()"]*(?:"[^"]*"[^()"]*)*\)/g.test(string)) {
+            continue;
+        } else {
+            break;
+        }
+    } while (!/^([-+]?[0-9]*\.*[0-9]+?)$/.test(string) || i == 3);
     // console.log(storedFunction.arithmetic.regex.test(str));
     // console.log(typeof str, str);
     return /\(?([-+]?[0-9]*\.?[0-9]+[\/\+\-\*])+([-+]?[0-9]*\.?[0-9]+)\)?/g.test(str) ? Math.round10(eval(str), -9) : Math.round10(eval(str), -9);
 }
 
 describe("REGEX STRING TESTS", function() {
-    const testCase = [{
-            name: "Parenthesise + Arithmetic",
-            value: "(3+4)",
-            expected: 7
-        },
+    const testCase = [
         // {
-        //     name: "Factorial",
-        //     value: "6!",
-        //     expected: 720
+        //     name: "Arithmetic",
+        //     value: "3+4",
+        //     expected: 7
         // },
         // {
-        //     name: "Multiple Factorials",
-        //     value: "6!+8!+9!",
-        //     expected: 403920
+        //     name: "Parenthesise + Arithmetic",
+        //     value: "(3+4)",
+        //     expected: 7
+        // },
+        // {
+        //     name: "Cosine",
+        //     value: "cos(5)",
+        //     expected: 0.283662185
+        // },
+        // {
+        //     name: "ln",
+        //     value: "ln(e)",
+        //     expected: 1
+        // },
+        // {
+        //     name: "Arithmetic + Functions",
+        //     value: "((3+4)+cos(5)+ln(e))",
+        //     expected: 8.28366218546
         // },
         // {
         //     name: "Percentage + Factorial",
         //     value: "6%!",
         //     expected: 1
         // },
-        // {
-        //     name: "Factorial + Percentage",
-        //     value: "6!%",
-        //     expected: 7.2
-        // },
+        {
+            name: "Factorial + Percentage",
+            value: "6!%",
+            expected: 7.2
+        },
         // {
         //     name: "Factorial + Percentage + Arithmetic Assortment",
         //     value: "6!%*9+6/2",
@@ -230,8 +283,7 @@ describe("REGEX STRING TESTS", function() {
         //     name: "Factorial + Percentage + Arithmetic Assortment",
         //     value: "6!%*1+6/2",
         //     expected: 10.2
-        // }
-        // {
+        // }, {
         //     name: "Simple Power",
         //     value: "4^4",
         //     expected: 256
@@ -260,7 +312,7 @@ describe("REGEX STRING TESTS", function() {
         //     name: "Percentage + Complex Power",
         //     value: "4!^.2^.3^5.2%",
         //     expected: 2.015415043
-        // }, 
+        // },
     ];
     for (let i = 0; i < testCase.length; i++) {
         it(testCase[i].name, function() {

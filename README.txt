@@ -10,8 +10,36 @@ Sound/Noise
     dot - test you approximately where all the test are
 
 -------------------------------------------------------------------------------------
-Doc Info - 18/09/2017 - 11:33 
+Doc Info - 18/09/2017 - 11:33 -> 18/09/2017 - 23:43
 -------------------------------------------------------------------------------------
+
+-----------------------------
+Doc Info - 18/09/2017 - 23:39 
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+
+Managed to pass all the previous tests, including
+Parenthesise + Arithmetic
+Cosine
+Natural log
+
+Still need to test more complex strings such as 
+((3+4)+cos(5)+ln(e))
+
+1) If it passes that tests, I will a few more differented test. With multiple other combinations.
+2) Then fix the numerical rounding error
+
+The Google Calculator only returns values 12 significant figures or less. Also I need to know if 
+it still returns the 0 at the end of those figures
+
+-----------------------------
+Doc Info - 18/09/2017 - 15:37 
+-----------------------------
+
+Insight Points: X has been/could/would be more helpful/useful, because/as Y
+> More In-depth research and planning would be more useful, as during development we do not want to 
+just discover recent pitfalls that could have been avoided
 
 -----------------------------
 Doc Info - 18/09/2017 - 14:57 
