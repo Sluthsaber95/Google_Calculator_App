@@ -1,5 +1,6 @@
 const mocha = require("mocha");
 const assert = require("chai").assert;
+const regexUsed = require("./regexTests.js").regexTrain;
 
 const toggleAngle = (angleUnits) => {
     return angleUnits === "Radian" ? 1 : (Math.PI / 180);
@@ -8,8 +9,9 @@ const factorial = num => {
     if (typeof num !== "number" || isNaN(num)) {
         return NaN;
     }
-    // The decision was to make the Max number of calls to the stack being under 10000, such as Chrome 11034, Firefox 50994
-    else if (num > 10000) {
+    // The decision was to made using the Google Calculator as a benchmark
+    // The number 170 was the tipping point at which the Google Calculator displated infinity
+    else if (num > 170) {
         return Infinity;
     }
     let val = 1;
@@ -53,60 +55,50 @@ const storedFunction = {
         }
     }
 };
+// console.log(plus);
 
-const prioritise = (str, propsName) => {
-    let i = 0;
-    const prioritising = (str, propsName) => {
-        if (storedFunction[propsName[i]].regex.test(str)) {
-            str = str.replace(storedFunction[propsName[i]].regex, storedFunction[propsName[i]].function);
-            i === propsName.length - 1 ? i : i++;
-            return prioritising(str, propsName)
-        }
-        return str;
-    }
-    return prioritising(str, propsName);
-}
+const prioritise = regexUsed;
 
 
-describe.only("BASIC ARITHMETIC TESTS =>", function() {
+describe.skip("BASIC ARITHMETIC TESTS =>", function() {
     const testCases = [{
             name: "Addition [Int]",
-            value: '3 + 4',
+            value: '3+4',
             expected: 7
         },
         {
             name: "Addition [Float]",
-            value: '5.6 + 9.4',
+            value: '5.6+9.4',
             expected: 15.0
         },
         {
             name: "Substract [Int]",
-            value: '17 - 6',
+            value: '17-6',
             expected: 11
         },
         {
             name: "Substract [Float]",
-            value: '15.0 - 6.9',
+            value: '15.0-6.9',
             expected: 8.1
         },
         {
             name: "Multiple [Int]",
-            value: '5 * 12',
+            value: '5*12',
             expected: 60
         },
         {
             name: "Multiple [Float]",
-            value: '1.2 * 1.3',
+            value: '1.2*1.3',
             expected: 1.56
         },
         {
             name: "Divide [Int]",
-            value: '16 / 2',
+            value: '16/2',
             expected: 8
         },
         {
             name: "Divide [Float]",
-            value: '21.6 / 3',
+            value: '21.6/3',
             expected: 7.2
         }
     ];
@@ -117,105 +109,81 @@ describe.only("BASIC ARITHMETIC TESTS =>", function() {
     }
 });
 
-describe.skip("INDIVIDUAL FUNCTION + CONSTANT TESTS =>", function() {
+describe.only("INDIVIDUAL FUNCTION + CONSTANT TESTS =>", function() {
     // all decimal values are kept to 4 d.p.
-    const testCases = [{
-            name: "Degrees [Int] To Radian Conversion ",
-            value: '360', // 4 d.p.
-            expected: 6.2832
-        },
-        {
-            name: "Degree [Float] to Radian Conversion",
-            value: '360.1',
-            expected: 6.2849
-        },
-        {
-            name: "Radian [Int] to Degrees Conversion",
-            value: '1',
-            expected: 57.2958
-        },
-        {
-            name: "Radian [Float] to Degrees Conversion",
-            value: '1.1',
-            expected: 63.0254
-        },
-        {
-            name: "Factorial Int",
-            value: '5',
-            expected: 120
-        },
-        // Factorial Float requires advanced mathematical knowledge
-        {
-            name: "Percentage [Int] Conversion",
-            value: '150%',
-            expected: 1.5
-        },
-        {
-            name: "Percentage [Float] Conversion",
-            value: '150.1%',
-            expected: 1.501
-        },
-        {
-            name: "Pi Constant",
-            value: 'π',
-            expected: 3.1416
-        },
-        {
-            name: "Euler's Constant",
-            value: 'e',
-            expected: 2.7183
-        },
+    const testCases = [
+        // {
+        //     name: "Factorial Int",
+        //     value: '5!',
+        //     expected: 120
+        // },
+        // // Factorial Float requires advanced mathematical knowledge
+        // {
+        //     name: "Percentage [Int] Conversion",
+        //     value: '150%',
+        //     expected: 1.5
+        // },
+        // {
+        //     name: "Percentage [Float] Conversion",
+        //     value: '150.1%',
+        //     expected: 1.501
+        // },
+        // {
+        //     name: "Pi Constant",
+        //     value: 'π',
+        //     expected: 3.141592654
+        // },
+        // {
+        //     name: "Euler's Constant",
+        //     value: 'e',
+        //     expected: 2.718281828
+        // },
         //By default, radian is utilized for trigonometric functions
-        {
-            name: "Sine [Int]",
-            value: 'sin(90)',
-            expected: 1
-        },
+        // {
+        //     name: "Sine [Int]",
+        //     value: 'sin(π/2)',
+        //     expected: 1
+        // },
         {
             name: "Sine [Float]",
-            value: 'sin(45.2)',
-            expected: 0.7095
+            value: 'sin((π+2)/2)',
+            // π+2 => 5.14159265359; (π+2)/2 => 2.57079632679
+            expected: 0.540302306
         },
         {
             name: "Cosine [Int]",
-            value: 'cos(360)',
+            value: 'cos(2π)',
             expected: 1
-        },
-        {
+        }, {
             name: "Cosine [Float]",
-            value: 'cos(45.2)',
-            expected: 0.7046
-        },
-        {
+            value: 'cos((π+2)/2)',
+            expected: -0.841470985
+        }, {
             name: "Tangent [Int]",
-            value: 'tan(45)',
+            value: 'tan(π/4)',
             expected: 1
-        },
-        {
+        }, {
             name: "Tangent [Int]",
-            value: 'tan(45.2)',
-            expected: 1.007
-        },
-        {
+            value: 'tan((π+2)/4)',
+            expected: 3.408223442
+        }, {
             name: "Log [Int]",
             value: 'log(1000)',
             expected: 3
         },
-        {
-            name: "Log [Float]",
-            value: 'log(45.2)',
-            expected: 1.6551
-        },
-        {
-            name: "Natural Log [Int]",
-            value: 'ln(2)',
-            expected: 0.6931
-        },
-        {
-            name: "Natural Log [Float]",
-            value: 'ln(45.2)',
-            expected: 3.8111
-        }
+        // {
+        //     name: "Log [Float]",
+        //     value: 'log(45.2)',
+        //     expected: 1.655138435
+        // }, {
+        //     name: "Natural Log [Int]",
+        //     value: 'ln(2)',
+        //     expected: 0.693147181
+        // }, {
+        //     name: "Natural Log [Float]",
+        //     value: 'ln(45.2)',
+        //     expected: 3.811097087
+        // }
     ];
     for (let i = 0; i < testCases.length; i++) {
         it(testCases[i].name, function() {
@@ -588,3 +556,24 @@ describe.skip("SPECIFIC FEATURE =>", function() {
         assert.equal(prioritise(testCase.value), testCase.expected);
     });
 });
+
+// {
+//     name: "Degrees [Int] To Radian Conversion ",
+//     value: '360', // 4 d.p.
+//     expected: 6.2832
+// },
+// {
+//     name: "Degree [Float] to Radian Conversion",
+//     value: '360.1',
+//     expected: 6.2849
+// },
+// {
+//     name: "Radian [Int] to Degrees Conversion",
+//     value: '1',
+//     expected: 57.2958
+// },
+// {
+//     name: "Radian [Float] to Degrees Conversion",
+//     value: '1.1',
+//     expected: 63.0254
+// },

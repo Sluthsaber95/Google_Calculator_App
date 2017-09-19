@@ -130,8 +130,35 @@ const storedFunction = {
         }
     }
 };
+// exports.plus = (a, b) => {
+//     return a + b;
+// }
 
-const regexTrain = (string) => {
+const captureLoopedValues = (timesLoop, element) => {
+    let filledArray = [];
+    let i = 0;
+    const loopedValues = () => {
+        i++;
+        filledArray.push(element)
+        if (i === timesLoop) {
+            console.log(filledArray);
+            return undefined;
+        }
+        return loopedValues();
+    }
+}
+
+const convertSymbol = (str) => {
+    if (/(e)/g.test(str)) {
+        return /^[e]$/g.test(str) ? Math.E : /(\d*?\.?\d*?)[e]/g.exec(str)[1] + "*" + Math.E;
+    }
+    if (/(π)/g.test(str)) {
+        return /^[π]$/g.test(str) ? Math.PI : /(\d*?\.?\d*?)[π]/g.exec(str)[1] + "*" + Math.PI;
+    }
+}
+String.prototype.convertSymbol = convertSymbol;
+
+exports.regexTrain = function(string) {
 
     let total = "";
     let endRegex = "";
@@ -140,18 +167,25 @@ const regexTrain = (string) => {
     // there should be check here. As in are there any more bracketed values??
     let str = "";
     let bracketedValue = "";
-    string = string.replace(/[e]/g, Math.E).replace(/[π]/g, Math.PI);
+
+    string = string.replace(/^(\d*?\.?\d*?)[e]$/g, Math.E).replace(/[π]/g, Math.PI);
     do {
+        // console.log(string);
         let functionUtilized = "";
         if (/(ln|log|sin|cos|tan)\([^()"]*(?:"[^"]*"[^()"]*)*\)/g.test(string)) {
             functionUtilized = /(ln|log|sin|cos|tan)\([^()"]*(?:"[^"]*"[^()"]*)*\)/g.exec(string)[1];
-        }
-        if (/\([^()"]*(?:"[^"]*"[^()"]*)*\)/g.test(string)) {
+            bracketedValue = /(ln|log|sin|cos|tan)\([^()"]*(?:"[^"]*"[^()"]*)*\)/g.exec(string)[0];
+            str = /\([^()"]*(?:"[^"]*"[^()"]*)*\)/g.exec(bracketedValue)[0]
+            str = str.slice(1, str.length - 1);
+        } else if (/\([^()"]*(?:"[^"]*"[^()"]*)*\)/g.test(string)) {
             bracketedValue = /\([^()"]*(?:"[^"]*"[^()"]*)*\)/g.exec(string)[0];
             str = bracketedValue.slice(1, bracketedValue.length - 1);
         } else {
             str = string;
         }
+        console.log(functionUtilized);
+        console.log(bracketedValue);
+        console.log(str);
         do {
             i++;
             if (storedFunction.factorial.regex.test(str)) {
@@ -196,11 +230,14 @@ const regexTrain = (string) => {
                 }
                 continue;
             }
-            console.log("a");
-            console.log(str);
-
+            // WARNING THIS HAS NO CONDITION - based on the assumption that it passes down the cascade 
+            // Arithmetic operations -> /\(?([-+]?[0-9]*\.?[0-9]+[\/\+\-\*])+([-+]?[0-9]*\.?[0-9]+)\)?/g
+            // Floats + Ints -> /^\d+\.\d+$/
+            str = eval(str);
             if (functionUtilized !== "") {
-
+                if (i < 2) {
+                    console.log(str);
+                }
                 switch (functionUtilized) {
                     case "ln":
                         str = Math.log(str) + "";
@@ -218,7 +255,7 @@ const regexTrain = (string) => {
                         str = Math.tan(str) + "";
                         break;
                 }
-                console.log(str);
+                // console.log(str);
                 str = str.replace(bracketedValue, str);
                 continue;
             }
@@ -237,82 +274,98 @@ const regexTrain = (string) => {
     return /\(?([-+]?[0-9]*\.?[0-9]+[\/\+\-\*])+([-+]?[0-9]*\.?[0-9]+)\)?/g.test(str) ? Math.round10(eval(str), -9) : Math.round10(eval(str), -9);
 }
 
+
+
 describe("REGEX STRING TESTS", function() {
-    const testCase = [
-        // {
-        //     name: "Arithmetic",
-        //     value: "3+4",
-        //     expected: 7
-        // },
-        // {
-        //     name: "Parenthesise + Arithmetic",
-        //     value: "(3+4)",
-        //     expected: 7
-        // },
-        // {
-        //     name: "Cosine",
-        //     value: "cos(5)",
-        //     expected: 0.283662185
-        // },
-        // {
-        //     name: "ln",
-        //     value: "ln(e)",
-        //     expected: 1
-        // },
-        // {
-        //     name: "Arithmetic + Functions",
-        //     value: "((3+4)+cos(5)+ln(e))",
-        //     expected: 8.28366218546
-        // },
-        // {
-        //     name: "Percentage + Factorial",
-        //     value: "6%!",
-        //     expected: 1
-        // },
+    const testCase = [{
+            name: "Arithmetic",
+            value: "3+4",
+            expected: 7
+        },
+        {
+            name: "Arithmetic + Functions",
+            value: "((3+4)+cos(5)+ln(e))",
+            expected: 8.283662185
+        },
+        {
+            name: "Arithmetic + Functions",
+            value: "((3+4)+ln(e))",
+            expected: 8
+        },
+        {
+            name: "Arithmetic + Functions",
+            value: "((3+4))",
+            expected: 7
+        },
+        {
+            name: "Arithmetic",
+            value: "3+4",
+            expected: 7
+        },
+        {
+            name: "Parenthesise + Arithmetic",
+            value: "(3+4)",
+            expected: 7
+        },
+        {
+            name: "Cosine",
+            value: "cos(5)",
+            expected: 0.283662185
+        },
+        {
+            name: "ln",
+            value: "ln(e)",
+            expected: 1
+        },
+        {
+            name: "Percentage + Factorial",
+            value: "6%!",
+            expected: 1
+        },
         {
             name: "Factorial + Percentage",
             value: "6!%",
             expected: 7.2
         },
-        // {
-        //     name: "Factorial + Percentage + Arithmetic Assortment",
-        //     value: "6!%*9+6/2",
-        //     expected: 67.8
-        // },
-        // {
-        //     name: "Factorial + Percentage + Arithmetic Assortment",
-        //     value: "6!%*1+6/2",
-        //     expected: 10.2
-        // }, {
-        //     name: "Simple Power",
-        //     value: "4^4",
-        //     expected: 256
-        // },
-        // {
-        //     name: "Complex Power",
-        //     value: "4.5^.2^.3^5.2",
-        //     expected: 4.479273878
-        // },
-        // {
-        //     name: "Factorial + Complex Power",
-        //     value: "4!^.2^.3^5.2",
-        //     expected: 23.767033491
-        // },
-        // {
-        //     name: "Percentage + Complex Power",
-        //     value: "4.5%^.2^.3^5.2",
-        //     expected: 0.045430361
-        // },
-        // {
-        //     name: "Percentage + Complex Power + Factorial",
-        //     value: "4%^.2^.3^5!",
-        //     expected: 0.04
-        // },
-        // {
-        //     name: "Percentage + Complex Power",
-        //     value: "4!^.2^.3^5.2%",
-        //     expected: 2.015415043
-        // },
+        {
+            name: "Factorial + Percentage + Arithmetic Assortment",
+            value: "6!%*9+6/2",
+            expected: 67.8
+        },
+        {
+            name: "Factorial + Percentage + Arithmetic Assortment",
+            value: "6!%*1+6/2",
+            expected: 10.2
+        }, {
+            name: "Simple Power",
+            value: "4^4",
+            expected: 256
+        },
+        {
+            name: "Complex Power",
+            value: "4.5^.2^.3^5.2",
+            expected: 4.479273878
+        },
+        {
+            name: "Factorial + Complex Power",
+            value: "4!^.2^.3^5.2",
+            expected: 23.767033491
+        },
+        {
+            name: "Percentage + Complex Power",
+            value: "4.5%^.2^.3^5.2",
+            expected: 0.045430361
+        },
+        {
+            name: "Percentage + Complex Power + Factorial",
+            value: "4%^.2^.3^5!",
+            expected: 0.04
+        },
+        {
+            name: "Percentage + Complex Power",
+            value: "4!^.2^.3^5.2%",
+            expected: 2.015415043
+        },
     ];
     for (let i = 0; i < testCase.length; i++) {
         it(testCase[i].name, function() {

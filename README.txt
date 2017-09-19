@@ -10,6 +10,51 @@ Sound/Noise
     dot - test you approximately where all the test are
 
 -------------------------------------------------------------------------------------
+Doc Info - 19/09/2017 - 10:28
+-------------------------------------------------------------------------------------
+-----------------------------
+Doc Info - 19/09/2017 - 16:14 
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+Build your first successful prototype function
+"((3+4)+cos(π)+ln(e))" => "((3+4)+cos(3.141592653589793)+ln(2.718281828459045))"
+-----------------------------
+Doc Info - 19/09/2017 - 15:18 
+-----------------------------
+TESTS + APP DEVELOPMENT
+There is still the `ReferenceError: Invalid left-hand side expression in postfix operation`
+
+-----------------------------
+Doc Info - 19/09/2017 - 13:15 
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+Insight Points: X has been/could/would be more helpful/useful, because/as Y
+Creating a function that can see inside values that are loop would be useful, as you can check what values have been returned
+before an endless loop;
+
+if (i < 2) {
+    console.log(str);
+}
+
+This condition will very useful, or just someway for you return something back once;
+
+-----------------------------
+Doc Info - 19/09/2017 - 12:45 
+-----------------------------
+
+Still need to some separate testing from changing Rad -> Deg.
+Therefore these tests are kept separate for me.
+
+
+TESTS
+
+Managed to test a complex string - ((3+4)+cos(5)+ln(e)).
+
+Note - after this, I need to go off to my doctors appointment
+
+-------------------------------------------------------------------------------------
 Doc Info - 18/09/2017 - 11:33 -> 18/09/2017 - 23:43
 -------------------------------------------------------------------------------------
 
