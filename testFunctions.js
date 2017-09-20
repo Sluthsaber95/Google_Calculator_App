@@ -475,8 +475,8 @@ describe.skip("SPECIFIC FEATURE =>", function() {
 
     const testGroup = [
         { unitName: "Factor", testUnit: ["!", "%"], method: [factorial, percentage] },
-        { unitName: "Func", testUnit: ["sin(", "cos(", "tan(", "ln(", "log("], method: [Math.sin, Math.cos, Math.tan, Math.log, Math.log10] },
         { unitName: "Power", testUnit: ["^"], method: [Math.pow] },
+        { unitName: "Func", testUnit: ["sin(", "cos(", "tan(", "ln(", "log("], method: [Math.sin, Math.cos, Math.tan, Math.log, Math.log10] },
         { unitName: "Arith", testUnit: ["+", "-", "*", "/"], method: [] }
     ];
     let calculateTotal = 0;

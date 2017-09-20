@@ -148,13 +148,14 @@ const captureLoopedValues = (timesLoop, element) => {
     }
 }
 
-const convertSymbol = (str) => {
-    if (/(e)/g.test(str)) {
-        return /^[e]$/g.test(str) ? Math.E : /(\d*?\.?\d*?)[e]/g.exec(str)[1] + "*" + Math.E;
-    }
-    if (/(π)/g.test(str)) {
-        return /^[π]$/g.test(str) ? Math.PI : /(\d*?\.?\d*?)[π]/g.exec(str)[1] + "*" + Math.PI;
-    }
+function convertSymbol() {
+    return this
+        .replace(/(\d*?\.?\d*?)(e)/g, (match, p1, p2) => {
+            return p1 == '' ? Math.E : p1 + '*' + Math.E;
+        })
+        .replace(/(\d*?\.?\d*?)(π)/g, (match, p1, p2) => {
+            return p1 == '' ? Math.PI : p1 + '*' + Math.PI;
+        });
 }
 String.prototype.convertSymbol = convertSymbol;
 
@@ -168,7 +169,7 @@ exports.regexTrain = function(string) {
     let str = "";
     let bracketedValue = "";
 
-    string = string.replace(/^(\d*?\.?\d*?)[e]$/g, Math.E).replace(/[π]/g, Math.PI);
+    string = string.convertSymbol();
     do {
         // console.log(string);
         let functionUtilized = "";
@@ -185,7 +186,7 @@ exports.regexTrain = function(string) {
         }
         console.log(functionUtilized);
         console.log(bracketedValue);
-        console.log(str);
+
         do {
             i++;
             if (storedFunction.factorial.regex.test(str)) {
@@ -208,11 +209,12 @@ exports.regexTrain = function(string) {
                         parseFloat(/([-+]?[0-9]*\.?[0-9]+[\%])/g.exec(str)[0]);
                     newStr = value / 100 + "";
                     str = str.replace(/([-+]?[0-9]*\.?[0-9]+[\%])/g, newStr);
-                    console.log(str);
+
                 }
                 continue;
             }
-            if (/^([-+]?[0-9]*\.?[0-9])+[^]+([-+]?[0-9]*\.?[0-9])+$/g.test(str) && !/\(?([-+]?[0-9]*\.?[0-9]+[\/\+\-\*])+([-+]?[0-9]*\.?[0-9]+)\)?/g.test(str) && !/^\d+\.\d+$/.test(str)) {
+            if (/^([-+]?[0-9]*\.?[0-9])+[^]+([-+]?[0-9]*\.?[0-9])+$/g.test(str) && !/\(?([-+]?[0-9]*\.?[0-9]+[\/\+\-\*])+([-+]?[0-9]*\.?[0-9]+)\)?/g.test(str) && !/^\d+?\.?\d+?$/.test(str)) {
+                console.log("I should not see this");
                 exponentDetected = /([-+]?[0-9]*\.?[0-9]+)/g [Symbol.match](str);
                 for (let j = exponentDetected.length - 1; j > 0; j--) {
                     console.log(j);
@@ -221,23 +223,21 @@ exports.regexTrain = function(string) {
                     let base = /^([-+]?[0-9]*[\%])$/g.test(exponentDetected[j - 1]) ? parseInt(exponentDetected[j - 1]) :
                         parseFloat(exponentDetected[j - 1]);
                     newStr = j == exponentDetected.length - 1 ? Math.pow(base, exp) : Math.pow(base, newStr);
-                    console.log(str);
+
                     if (j > 1) {
                         continue;
                     }
                     str = str.replace(/^([-+]?[0-9]*\.?[0-9])+[^]+([-+]?[0-9]*\.?[0-9])+$/g, newStr);
-                    console.log(str);
+
                 }
                 continue;
             }
             // WARNING THIS HAS NO CONDITION - based on the assumption that it passes down the cascade 
             // Arithmetic operations -> /\(?([-+]?[0-9]*\.?[0-9]+[\/\+\-\*])+([-+]?[0-9]*\.?[0-9]+)\)?/g
             // Floats + Ints -> /^\d+\.\d+$/
+
             str = eval(str);
             if (functionUtilized !== "") {
-                if (i < 2) {
-                    console.log(str);
-                }
                 switch (functionUtilized) {
                     case "ln":
                         str = Math.log(str) + "";
@@ -255,7 +255,7 @@ exports.regexTrain = function(string) {
                         str = Math.tan(str) + "";
                         break;
                 }
-                // console.log(str);
+                // 
                 str = str.replace(bracketedValue, str);
                 continue;
             }

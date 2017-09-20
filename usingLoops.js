@@ -1,16 +1,22 @@
-const convertTransdentalNum = (str) => {
-    if (/(e)/g.test(str)) {
-        return /^[e]$/g.test(str) ? Math.E : /(\d*?\.?\d*?)[e]/g.exec(str)[1] + "*" + Math.E;
-    }
-    if (/(π)/g.test(str)) {
-        return /^[π]$/g.test(str) ? Math.PI : /(\d*?\.?\d*?)[π]/g.exec(str)[1] + "*" + Math.PI;
-    }
-}
-String.prototype.convertTransdentalNum = convertTransdentalNum;
+// function convertSymbol() {
+//     return this
+//         .replace(/(\d*?\.?\d*?)(e)/g, (match, p1, p2) => {
+//             return p1 == '' ? Math.E : p1 + '*' + Math.E;
+//         })
+//         .replace(/(\d*?\.?\d*?)(π)/g, (match, p1, p2) => {
+//             return p1 == '' ? Math.PI : p1 + '*' + Math.PI;
+//         });
+// }
+// String.prototype.convertSymbol = convertSymbol;
+
+// String.prototype.returnThis = returnThis;
 const string = "2e";
 const pi = "2π";
-const complexString = "((3+4)+cos(π)+ln(e))"
-console.log(String.prototype.convertTransdentalNum(complexString));;
+// const complexString = "((3+4)+cos(2π)+ln(2e))";
+const dualComplexString = "2e+e-3e*5π";
+console.log(dualComplexString.convertTransdentalNum());;
+// console.log(complexString.returnThis("cos"));
+//regexp[Symbol.match](str)
 
 // let str = "4.5^.2^.3^5.2"
 // exponentDetected = /([-+]?[0-9]*\.?[0-9]+)/g [Symbol.match](str);
