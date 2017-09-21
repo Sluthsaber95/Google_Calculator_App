@@ -10,8 +10,103 @@ Sound/Noise
     dot - test you approximately where all the test are
 
 -------------------------------------------------------------------------------------
-Doc Info - 19/09/2017 - 10:28
+Doc Info - 21/09/2017 - 18:09
 -------------------------------------------------------------------------------------
+
+TESTS + APP DEVELOPMENT
+
+Update: 
+
+Classic chicken and egg situation, where I am constructing functions used to fix the symbol changes, such as Math.PI and Math.E; 
+as well as the rounding function.
+But they are causing more bugs than they can solve.
+
+-------------------------------------------------------------------------------------
+Doc Info - 20/09/2017 - 16:32
+-------------------------------------------------------------------------------------
+
+Pain Points Description: X when I Y, as Z
+
+It's feels like I'm walking backwacks when I leave a job unfinished, and cannot pick up exactly where I was off, as I use a function that was semi complete.
+
+-------------------------------------------------------------------------------------
+Doc Info - 20/09/2017 - 11:17
+-------------------------------------------------------------------------------------
+
+TEST Cases
+
+
+(14!)^16 -> cameback with 14!
+tan(20)*20 -> cameback with tan(20)
+
+-----------------------------
+Doc Info - 20/09/2017 - 14:47 
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+
+Insight Points: X has been/could/would be more helpful/useful, because/as Y
+Creating a checklist of things that things going into the function and out of function is imperative.
+These checklist, can be turned into tests and automated.
+
+A use cases I just thought of then, that would have saved me some time would be.
+
+"14 * tan(11)" this string should not contain any whitespaces, else throw an error. The same error has happened
+many times now and I haven't used;
+
+1) Try Catch Block & 2)String Sanitiser
+Both should be utilized in that order. As the try catch can notify you, then you place sanitizers in specific area
+
+
+
+-----------------------------
+Doc Info - 20/09/2017 - 14:47 
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+
+The specific feature testing unit that I made, was useful to use, however,
+it would have been better if it was further simplified. Including comments.
+
+This is testing algorithm, higher-level
+
+Randomized testing fail -> Place features + values from that randomized test, into specific test ->
+-> Alter the function until it passes that test -> save that test to one side to reuse again
+
+Pain Points Description: X when I Y. As Z
+
+It would be less of pain when I perform any test, to make the test that is simple to use, and more flexible.
+As this would make my life easier and testing more efficient.
+-----------------------------
+Doc Info - 20/09/2017 - 13:33 
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+
+Manage to fix my minor pain point of decimal places, but some reason, the Google is implementing
+a different system for significant figures depending on what gets calculated
+
+-----------------------------
+Doc Info - 20/09/2017 - 12:39 
+-----------------------------
+TESTS + APP DEVELOPMENT
+
+Trying to pass the first phase of random tests
+
+However what must be fixed, is the rounding of both the testing tools and the application itself
+
+Pain Points Description: X when I Y, as Z
+
+It's such a shame that I didn't fixed the number of significant figures earlier when I conduct any tests, 
+this would have saved a lot of testing time, as tests would have matched the given output of the Google 
+Calculator.
+-----------------------------
+Doc Info - 20/09/2017 - 11:17 
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+Managed to finish the 2nd stage of testing
+
 -----------------------------
 Doc Info - 19/09/2017 - 16:14 
 -----------------------------
@@ -319,8 +414,6 @@ Includes an error - Invalid left-hand side expression in postfix operation?
 Some mistakes require me to advance my current mathematical knowledge, such factorial floats. So in the meantime they cannot yet be 
 fixed.
 
-Pain Point - 
-
 -----------------------------
 Doc Info - 15/09/2017 - 20:15
 -----------------------------
@@ -533,7 +626,7 @@ After looking at the list of features. Please see below;
 
         1)  factorial
         2)  percentage
-        3)  sine
+        3)  sine 
         4)  cosine
         5)  tangent
         6)  π

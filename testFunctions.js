@@ -60,7 +60,7 @@ const storedFunction = {
 const prioritise = regexUsed;
 
 
-describe.skip("BASIC ARITHMETIC TESTS =>", function() {
+describe.only("BASIC ARITHMETIC TESTS =>", function() {
     const testCases = [{
             name: "Addition [Int]",
             value: '3+4',
@@ -111,128 +111,79 @@ describe.skip("BASIC ARITHMETIC TESTS =>", function() {
 
 describe.only("INDIVIDUAL FUNCTION + CONSTANT TESTS =>", function() {
     // all decimal values are kept to 4 d.p.
-    const testCases = [
-        // {
-        //     name: "Factorial Int",
-        //     value: '5!',
-        //     expected: 120
-        // },
-        // // Factorial Float requires advanced mathematical knowledge
-        // {
-        //     name: "Percentage [Int] Conversion",
-        //     value: '150%',
-        //     expected: 1.5
-        // },
-        // {
-        //     name: "Percentage [Float] Conversion",
-        //     value: '150.1%',
-        //     expected: 1.501
-        // },
-        // {
-        //     name: "Pi Constant",
-        //     value: 'π',
-        //     expected: 3.141592654
-        // },
-        // {
-        //     name: "Euler's Constant",
-        //     value: 'e',
-        //     expected: 2.718281828
-        // },
-        //By default, radian is utilized for trigonometric functions
-        // {
-        //     name: "Sine [Int]",
-        //     value: 'sin(π/2)',
-        //     expected: 1
-        // },
+    const testCases = [{
+            name: "Factorial Int",
+            value: '5!',
+            expected: 120
+        },
+        // Factorial Float requires advanced mathematical knowledge
+        {
+            name: "Percentage [Int] Conversion",
+            value: '150%',
+            expected: 1.5
+        },
+        {
+            name: "Percentage [Float] Conversion",
+            value: '150.1%',
+            expected: 1.501
+        },
+        {
+            name: "Pi Constant",
+            value: 'π',
+            expected: 3.14159265359
+        },
+        {
+            name: "Euler's Constant",
+            value: 'e',
+            expected: 2.71828182846
+        },
+        // By default, radian is utilized for trigonometric functions
+        {
+            name: "Sine [Int]",
+            value: 'sin(π/2)',
+            expected: 1
+        },
         {
             name: "Sine [Float]",
             value: 'sin((π+2)/2)',
             // π+2 => 5.14159265359; (π+2)/2 => 2.57079632679
-            expected: 0.540302306
+            expected: 0.540302305868
         },
         {
             name: "Cosine [Int]",
             value: 'cos(2π)',
             expected: 1
-        }, {
+        },
+        {
             name: "Cosine [Float]",
             value: 'cos((π+2)/2)',
-            expected: -0.841470985
+            expected: -0.841470984808
+                //
         }, {
             name: "Tangent [Int]",
             value: 'tan(π/4)',
             expected: 1
         }, {
-            name: "Tangent [Int]",
+            name: "Tangent [Float]",
             value: 'tan((π+2)/4)',
-            expected: 3.408223442
+            expected: 3.40822344234
         }, {
             name: "Log [Int]",
             value: 'log(1000)',
             expected: 3
         },
-        // {
-        //     name: "Log [Float]",
-        //     value: 'log(45.2)',
-        //     expected: 1.655138435
-        // }, {
-        //     name: "Natural Log [Int]",
-        //     value: 'ln(2)',
-        //     expected: 0.693147181
-        // }, {
-        //     name: "Natural Log [Float]",
-        //     value: 'ln(45.2)',
-        //     expected: 3.811097087
-        // }
-    ];
-    for (let i = 0; i < testCases.length; i++) {
-        it(testCases[i].name, function() {
-            assert.equal(prioritise(testCases[i].value), testCases[i].expected, "Expected prioritise(" + testCases[i].value + ") to return " + testCases[i].expected);
-        });
-    }
-});
-
-describe.skip("POWER INDEX TESTS =>", function() {
-    // all decimal values are kept to 4 d.p.
-    const testCases = [{
-            name: "Power Base [Int] Index [Int]",
-            value: "2^3",
-            expected: 8
-        },
         {
-            name: "Power Base [Float] Index [Float]",
-            value: "2.5^3.1",
-            expected: 17.1243
-        },
-        {
-            name: "Power Base Multiple Index [Float]",
-            value: "2.5^3.1^1.7",
-            expected: 529.0930
-        },
-        {
-            name: "Power Base Multiple Index [Float]",
-            value: "2.5^3.1^1.7",
-            expected: 529.0930
-        },
-        {
-            name: "Square Root [Int]",
-            value: "4^0.5",
-            expected: 2
-        },
-        {
-            name: "Square Root [Float]",
-            value: "45.2^0.5",
-            expected: 6.7231
-        },
-        {
-            name: "Exponent [Int]",
-            value: "10 ^ 2",
-            expected: 100
-        },
-        {
-            name: "Exponent [Float]",
-            value: "10^0.6",
-            expected: 3.9811
+            name: "Log [Float]",
+            value: 'log(45.2)',
+            expected: 1.65513843481
+        }, {
+            name: "Natural Log [Int]",
+            value: 'ln(2)',
+            expected: 0.693147180560
+        }, {
+            name: "Natural Log [Float]",
+            value: 'ln(45.2)',
+            expected: 3.81109708684
         }
     ];
     for (let i = 0; i < testCases.length; i++) {
@@ -242,13 +193,58 @@ describe.skip("POWER INDEX TESTS =>", function() {
     }
 });
 
-describe.skip("2 COMBINATION FEATURES =>", function() {
+describe.only("POWER INDEX TESTS =>", function() {
+    // all decimal values are kept to 4 d.p.
+    const testCases = [{
+            name: "Power Base [Int] Index [Int]",
+            value: "2^3",
+            expected: 8
+        },
+        {
+            name: "Power Base [Float] Index [Float]",
+            value: "2.5^3.1",
+            expected: 17.1243472873
+        },
+        {
+            name: "Power Base Multiple Index [Float]",
+            value: "2.5^3.1^1.7",
+            expected: 529.092997828
+        },
+        {
+            name: "Square Root [Int]",
+            value: "4^0.5",
+            expected: 2
+        },
+        {
+            name: "Square Root [Float]",
+            value: "45.2^0.5",
+            expected: 6.72309452559
+        },
+        {
+            name: "Exponent [Int]",
+            value: "10^2",
+            expected: 100
+        },
+        {
+            name: "Exponent [Float]",
+            value: "10^0.6",
+            expected: 3.98107170553
+        }
+    ];
+    for (let i = 0; i < testCases.length; i++) {
+        it(testCases[i].name, function() {
+            assert.equal(prioritise(testCases[i].value), testCases[i].expected, "Expected prioritise(" + testCases[i].value + ") to return " + testCases[i].expected);
+        });
+    }
+});
+
+describe.only("2 COMBINATION FEATURES =>", function() {
 
     // Set Tests
     const testCases = [{
         name: "Factor + Func",
         value: "log(10!)",
-        expected: 6.5598
+        expected: 6.55976303288
     }];
     for (let i = 0; i < testCases.length; i++) {
         it(testCases[i].name, function() {
@@ -256,7 +252,7 @@ describe.skip("2 COMBINATION FEATURES =>", function() {
         });
     }
     // Random Tests
-    const randomTestCase = 9;
+    const randomTestCase = 0;
 
     const randomTestGroup = () => {
         const testGroup = [
