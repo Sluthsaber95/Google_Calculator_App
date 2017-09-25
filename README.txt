@@ -10,8 +10,469 @@ Sound/Noise
     dot - test you approximately where all the test are
 
 -------------------------------------------------------------------------------------
-Doc Info - 21/09/2017 - 18:09
+Doc Info - 25/09/2017 - 00:07
 -------------------------------------------------------------------------------------
+
+-----------------------------
+Doc Info - 25/09/2017 - 13:28
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+
+Update:
+
+App managed to pass every test!!
+
+Now to App development.
+
+-----------------------------
+Doc Info - 25/09/2017 - 00:15
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+
+Update:
+
+Managed to debug some parts of the rounding error.
+
+-----------------------------
+Doc Info - 25/09/2017 - 00:07
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+
+Update:
+
+INSIG-00009
+Insight Points: X has been/could/would be more helpful/useful, because/as Y
+Sanitising results would be more helpful, as this would mean that mistakes of entering the wrong datatypes
+would not be made.
+
+-------------------------------------------------------------------------------------
+Doc Info - 24/09/2017 - 00:36 [End Session]
+-------------------------------------------------------------------------------------
+
+-----------------------------
+Doc Info - 24/09/2017 - 21:05
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+
+Update:
+
+Managed to solve Bugs for these:
+
+(20*18)% - In Progress
+14%*6 - In Progress
+
+So the last problems from the 2 combination features, are rounding errors. 
+such as 
+23.20000000000, or 23.20000000001 floating points rounding
+0.9999999999999999 which we can just round to 1;
+
+
+-----------------------------
+Doc Info - 24/09/2017 - 13:53
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+
+Update:
+
+Managed to solve Bugs for these:
+
+(12^13)^7
+(15/11)^13
+(13+11)%
+(7%)^18, (9%)^16 -> returning small numbers
+
+
+-----------------------------
+Doc Info - 24/09/2017 - 00:49
+-----------------------------
+
+Turns out I was performing, a form of bottom-up integration testing. I was also performing;
+> CI
+Next stage after integration testing -> move onto user acceptance testing go over the tests again 
+-> validation testing to see if calculator meets all the specs
+
+Dependency hell - not relevant, as I haven't used many dependencies and they are only testing tools
+http://searchsoftwarequality.techtarget.com/definition/integration-testing
+
+-----------------------------
+Doc Info - 24/09/2017 - 00:36
+-----------------------------
+
+
+TESTS + APP DEVELOPMENT
+
+TASKS
+> Complete more tests
+> Hope to do some integration testing soon.
+> Also use sinon.js
+-------------------------------------------------------------------------------------
+Doc Info - 23/09/2017 - 12:13 
+-------------------------------------------------------------------------------------
+
+-----------------------------
+Doc Info - 23/09/2017 - 23:55
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+
+Update:
+
+Managed to dig deeper in the Math.pow() function and discover that 
+Math(-x, y) => NaN;
+
+Managed to solve Bugs for these 
+17^9/12
+log(18^13)
+8!*16
+3*14^4
+5/20/4
+10^1-5
+tan(x), sin(x), cos(x) x < 10^16 else the Google Calculator will return 0; JS goes haywire at around 19^20
+Manage to complete the entire debugging for now.
+
+INSIG-00008
+Insight Points: X has been/could/would be more helpful/useful, because/as Y
+Having a nice debugging workflow, during the testing stage, would be more helpful, as I could easily identify 
+what needs to be debugged.
+
+For instance you can add additional tags, such as console.log("string : " + string);
+
+-----------------------------
+Doc Info - 23/09/2017 - 12:13
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+
+Update:
+
+3rd problem with string 17^4/12
+
+actual - Infinity
+expected - 13176430709.88889
+
+
+-------------------------------------------------------------------------------------
+Doc Info - 22/09/2017 - 10:32 - 22/09/2017 - 22:16 
+-------------------------------------------------------------------------------------
+
+-----------------------------
+Doc Info - 22/09/2017 - 22:16
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+
+Update:
+
+Not Managed to deal with 0.15 rounding error, slowly unvailing a new set of problems 
+with that rounding error.
+
+
+-----------------------------
+Doc Info - 22/09/2017 - 21:16
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+
+Update:
+
+Managed to fix 2 out of the 10 Randomly generated errors.
+
+
+-----------------------------
+Doc Info - 22/09/2017 - 15:36
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+
+Update:
+
+Would it be a slow process to iterate from these steps??
+
+Original Tests
+(17/14)!
+
+Then iteration would be to test percentages '%'
+(17/14)%
+
+-----------------------------
+Doc Info - 22/09/2017 - 14:51
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+
+Update:
+
+Entire Error Log below for random test: Luckily all 10 out of the 10 tests failed.
+
+Decided to separate the Console_Log + Error_log, into 2 separate files to make it easier for me to view them both.
+And experiment on individual errors one by one.
+
+Bug Log:
+
+The random function, created a string with spaces, so needed to get rid of them.
+
+-----------------------------
+Doc Info - 22/09/2017 - 14:42 
+-----------------------------
+
+Same thing happened again, I added and committed and didn't push yet, so it wasn't stored, and all my commit disappeared.
+
+Really need to look into git stash, or better practice how git works.
+
+
+-----------------------------
+Doc Info - 22/09/2017 - 14:10 
+-----------------------------
+
+Finished a bunch of bug fixes, then accidentally used git stash, without adding or commiting any files, big mistake!! 
+All previous was wiped clean.
+
+Need to continue with all those bug fixes again.
+
+INSIG-00007
+Insight Points: X has been/could/would be more helpful/useful, because/as Y
+It feels super relieved that I have noted down what I have done in a log, which has been super helpful, as I would have had to test things from the beginning, 
+if I would have never noted anything down. Saves me 1 - 2 hours of work.
+
+-----------------------------
+Doc Info - 22/09/2017 - 13:23 
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+
+Update:
+
+INSIG-00006
+Insight Points: X has been/could/would be more helpful/useful, because/as Y
+Jonny was speaking to him about a spec folder, researching this would more useful, as it will enable me to run my tests more effectively.
+
+
+Bug Log:
+
+1) AssertionError: log(14)/14: expected '1.14612803568' to equal 0.08186628826
+
+
+
+
+-----------------------------
+Doc Info - 22/09/2017 - 13:05 
+-----------------------------
+
+BREAK
+
+-----------------------------
+Doc Info - 22/09/2017 - 12:53 
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+
+Update:
+
+Tried INSIG-00004, was able to observe what bugs I needed to fix, and allowed me to focus as well as break up a specific problem bit by bit.
+
+INSIG-00005
+Insight Points: X has been/could/would be more helpful/useful, because/as Y
+Writing tempory code could be more helpful, as it speeds up development.
+
+The idea of using tempory code is to remove, after finishing that use case.
+
+I was thinking of using it. For the testing scenario.
+
+So this is the workflow.
+
+Temp Code -> Do I still need it -> Yes -> Keep it there but add a comment, to remind oneself to say that this code can be deleted and replace with etc...
+                                \
+                                 -> No -> Remove it
+
+-> Still require he temp code to be there -> Yes -> Keep the code there, but create a comment to remind oneself to remove it once in production, this removal process should be quick and simple
+                                            \
+                                            -> No -> Remove it
+
+For instance:
+
+    // Temp Code -> Remove during production
+    // Used to toggle for the testing of use cases
+    const testCases = false? [{
+        name: "Factor + Func",
+        value: "log(10!)",
+        expected: 6.55976303288
+    }, {
+        name: "Func + Arith",
+        value: "log(log(1))",
+        expected: -Infinity
+    }, {
+        name: "Func + Arith",
+        value: "ln(13/11)",
+        expected: 0.16705408466
+    }] : [];
+
+WARNING: After each change, and an attempt at that bug fix was made. Run through all tests again.
+
+
+-----------------------------
+Doc Info - 22/09/2017 - 11:50 
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+
+Update:
+
+INSIG-00004
+Insight Points: X has been/could/would be more helpful/useful, because/as Y
+Time to setup a debugging method, this could be more helpful, as it would speed up development.
+
+After getting a log of these bugs, we should be able to target each bug specifically??
+
+-----------------------------
+Doc Info - 22/09/2017 - 11:50 
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+
+Update:
+
+INSIG-00003 
+Insight Points: X has been/could/would be more helpful/useful, because/as Y
+As the debugging becomes more and more complicated, labeling console.log() has been pretty useful, as I am able to keep track of diagnostics for specific parts of the code.
+
+For instance
+
+console.log("regexTests.js -> func: prioritise: " + str); //so its from the regexTests folder, within function prioritise.
+
+-----------------------------
+Doc Info - 22/09/2017 - 11:22 
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+
+Update:
+
+INSIG-00001 
+Insight Points: X has been/could/would be more helpful/useful, because/as Y
+Decided to label all my insights with a word and then 5 hexadecimal digit number 16^5 options to have, this would helpful. As I am
+planning to make an application, where I can store information on my pain and insight points.
+
+INSIG-00002 
+Would be good to document all the bugs I have come across, this would be useful as it will speed up development in the short term, especially if they are many.
+And I could search for the similar kind of the bug in the future, if it crops up again.
+
+Bug Log: 
+
+This comes from the randomised tests.
+
+Bug fixes for specific strings:
+
+[21/09/2017 - 21:30]
+
+Basic:
+(1+6)!
+(9!)^7
+13+15*5
+(log(8))%
+
+I believe it is due to the string detection, in relation to brackets.
+
+Weird returns
+3^11-8 -> Actual: 0, Expected: 177139
+
+Advanced:
+There is another error -> TypeError: Cannot read property '2' of null
+This is coming from the fact that the roundSF function, match regex detection is not detecting anything
+
+[22/09/2017]
+
+1) Expected 4.268788542106373e-16
+AssertionError: (14%)^18: expected 0.14 to equal '0.00000000000'
+Note: It's understandbly the very small values, that contain e^-x value, which we can filter off as ne^-x;
+> Just checked that the eval function, this is what it returns for values 1e-6 + 1e-7
+> eval("1e-7")
+1e-7
+> eval("1e-6")
+0.000001 
+
+2) Expected: 1
+AssertionError: (15%)!: expected '0.200000000000' to equal 1
+Note: Another rounding error 
+
+2) TypeError: Cannot read property '2' of null
+Note: Just observe the reason for this problem is that
+> NaN is used as an expected value; meaning the random test generator is faulty
+For instance:
+
+Test Value: ln(13/11), ln(8+4), ln(18*10), tan(19-20)
+Expected: NaN
+Note: Need to fix testing unit first.
+
+[SOLVED]
+Test Value: log(log(1))
+Expected: -Infinity
+
+
+3) Infinite Loop Problem
+REGEXTESTS func in loop-> sin
+REGEXTESTS str in loop->-0.9899924966004454
+
+REGEXTESTS func in loop-> tan
+REGEXTESTS str in loop->-0.45231565944180985
+
+This often occurs with Test cases set to 20;
+
+Plan is to solve the bugs one at a time, I would like to prioritise which bug to solve, I still do not know how yet.
+The plan now is to solve the easy bugs first and then harders ones after to, to increase S/N for tests. 
+
+-------------------------------------------------------------------------------------
+Doc Info - 22/09/2017 - 10:32
+-------------------------------------------------------------------------------------
+
+TESTS + APP DEVELOPMENT
+
+Update:
+
+Insight Points: X has been/could/would be more helpful/useful, because/as Y
+Reading, studying documentation, revising them over and over again, would be more helpful, because I spend so much time referring
+back to them. Where as my workflow would be much more quick, if I could predict what something would return. 
+> It would also result in a large S/N, I've noticed I use less console.log(), to figure out what was going wrong.
+
+-------------------------------------------------------------------------------------
+Doc Info - 21/09/2017 - 18:09 [End of Session]
+-------------------------------------------------------------------------------------
+
+-----------------------------
+Doc Info - 21/09/2017 - 21:30 
+-----------------------------
+
+TESTS + APP DEVELOPMENT
+
+Update:
+
+Managed to pass all 3 series of tests.
+Time to unleash those randomised tests.
+
+Bug fixes for specific strings:
+
+Basic:
+(1+6)!
+(9!)^7
+13+15*5
+(log(8))%
+
+I believe it is due to the string detection, in relation to brackets.
+
+Weird returns
+3^11-8 -> Actual: 0, Expected: 177139
+
+Advanced:
+There is another error -> TypeError: Cannot read property '2' of null
+This is coming from the fact that the roundSF function, match regex detection is not detecting anything
+
+-----------------------------
+Doc Info - 21/09/2017 - 18:09 
+-----------------------------
 
 TESTS + APP DEVELOPMENT
 
@@ -22,7 +483,7 @@ as well as the rounding function.
 But they are causing more bugs than they can solve.
 
 -------------------------------------------------------------------------------------
-Doc Info - 20/09/2017 - 16:32
+Doc Info - 20/09/2017 - 16:32 [End of Session]
 -------------------------------------------------------------------------------------
 
 Pain Points Description: X when I Y, as Z
@@ -30,7 +491,7 @@ Pain Points Description: X when I Y, as Z
 It's feels like I'm walking backwacks when I leave a job unfinished, and cannot pick up exactly where I was off, as I use a function that was semi complete.
 
 -------------------------------------------------------------------------------------
-Doc Info - 20/09/2017 - 11:17
+Doc Info - 20/09/2017 - 11:17 WAS NEVER CLOSED
 -------------------------------------------------------------------------------------
 
 TEST Cases

@@ -6,6 +6,9 @@ const factorial = num => {
     if (typeof num !== "number" || isNaN(num)) {
         return NaN;
     }
+    if (!(num % 1 === 0)) {
+        return num;
+    }
     // The decision was to make the Max number of calls to the stack being under 10000, such as Chrome 11034, Firefox 50994
     else if (num > 10000) {
         return Infinity;
@@ -115,6 +118,44 @@ function convertSymbol(str) {
 
 function roundSF(significantFig) {
     // Match every "leading zeros" before and after the .
+
+    if (this == Infinity || this == -Infinity) {
+        return this;
+    }
+    // Numbers with digits 1e+20 & beyond are automatically converted to exponential numbers, via the eval function
+    if (this >= 1e+20) {
+        return eval(this);
+    }
+    // Decimal numbers that contain many zeros at the end of it
+    if (/0/g.test(/(0*$)/ [Symbol.match](this.toString())[0])) {
+        console.log("Array Length 0's : " + /0/g.test(/(0*$)/ [Symbol.match](this.toString())[0]));
+        return this % 1 === 0 ? eval(this) : parseFloat(this.toString().replace(/(0)/, ""));
+    }
+    // Decimal numbers that contain many nines at the end of it
+
+    if (/9/g.test(/(9*$)/ [Symbol.match](this.toString())[0])) {
+        console.log("I should see this : " + this)
+        if (/(9*$)/ [Symbol.match](this.toString())[0].length >= 3) {
+            let strEndNine = this.toString();
+            let num = strEndNine.match(/(\d9*)$/)[0][0];
+            if (num === "9") {
+                console.log("if")
+                console.log(parseInt(strEndNine.split(".")[0]));
+                return parseInt(strEndNine.split(".")[0]) + 1;
+
+            } else {
+                console.log("else");
+                let index = strEndNine.indexOf(num);
+                let numAtIndex = strEndNine[strEndNine.indexOf(num)];
+                let indexNum = parseInt(num) + 1;
+                let afterDecimal = strEndNine.slice(strEndNine.indexOf(".") + 1).replace(/(9*)$/, "")
+                return strEndNine.slice(0, index) + strEndNine.slice(index, afterDecimal.length + 1) + indexNum;
+            }
+        } else {
+            return this;
+        }
+    }
+
     var matches = this.toString().match(/^-?(0+)\.(0*)/);
     console.log(matches);
     // starting with "0."
@@ -161,7 +202,16 @@ function roundSF(significantFig) {
 
         negateRoundError = Number(sf).toFixed(matches[2].length + significantFig);
         console.log(matches.input);
-        return negateRoundError > matches.input ? Number(sf).toFixed(matches[2].length + significantFig) : Math.round10(matches.input, -12);
+        console.log(negateRoundError.toString());
+
+        // if (matches.input >= .15 && matches.input < 0.2) {
+        //     return matches.input;
+        // }
+
+        //return;
+        // return negateRoundError / matches.input;
+        console.log(negateRoundError, matches.input);
+        return negateRoundError < matches.input ? Math.round10(matches.input, -12) : (negateRoundError / matches.input) >= (0.2 + Math.pow(1, -100)) / 0.15 ? negateRoundError : matches.input;
     }
 
     // starting with something else like -5.574487436097115
@@ -200,22 +250,25 @@ exports.regexTrain = function(string) {
         } else {
             str = string;
         }
-        console.log(functionUtilized);
-        console.log(bracketedValue);
-        console.log(str);
+        // console.log(functionUtilized);
+        // console.log(bracketedValue);
+        // console.log(str);
         do {
+            console.log("Init String : " + string);
+            console.log("Init Str :" + str);
             i++;
-            console.log("Experimenting with log(1000)->" + str);
-            if (storedFunction.factorial.regex.test(str)) {
-
+            if (/([-+]?[0-9]*\.?[0-9]+[\!])/g.test(str)) {
+                console.log("str : " + str)
                 factorialDetected = /([-+]?[0-9]*\.?[0-9]+[\!])/g [Symbol.match](str);
                 for (let j = 0; j < factorialDetected.length; j++) {
                     let value = /^([-+]?[0-9]*[\!])$/g.test(factorialDetected[j]) ? parseInt(/([-+]?[0-9]*[\!])/g.exec(factorialDetected[j])[0]) :
                         parseFloat(/([-+]?[0-9]*\.?[0-9]+[\!])/g.exec(factorialDetected[j])[0]);
                     // console.log(value);
                     newStr = factorial(value) + "";
-                    // console.log(newStr);
+                    console.log("newStr : " + newStr);
+                    console.log("str after: " + str);
                     str = str.replace(/([0-9]*\.?[0-9]+[\!])/, newStr);
+
                 }
                 continue;
             }
@@ -231,34 +284,72 @@ exports.regexTrain = function(string) {
                 }
                 continue;
             }
-            if (/^([-+]?[0-9]*\.?[0-9])+[^]+([-+]?[0-9]*\.?[0-9])+$/g.test(str) && !/\(?([-+]?[0-9]*\.?[0-9]+[\/\+\-\*])+([-+]?[0-9]*\.?[0-9]+)\)?/g.test(str) && !/^\d+\.\d+$/.test(str) && !/^\d+$/.test(str)) {
-                exponentDetected = /([-+]?[0-9]*\.?[0-9]+)/g [Symbol.match](str);
-                for (let j = exponentDetected.length - 1; j > 0; j--) {
-                    console.log(j);
-                    let exp = /^([-+]?[0-9]*[\%])$/g.test(exponentDetected[j]) ? parseInt(exponentDetected[j]) :
-                        parseFloat(exponentDetected[j]);
-                    let base = /^([-+]?[0-9]*[\%])$/g.test(exponentDetected[j - 1]) ? parseInt(exponentDetected[j - 1]) :
-                        parseFloat(exponentDetected[j - 1]);
-                    newStr = j == exponentDetected.length - 1 ? Math.pow(base, exp) : Math.pow(base, newStr);
-                    console.log(str);
-                    if (j > 1) {
-                        continue;
+            if (/([-+]?[0-9]*\.?[0-9])+[\^]+([-+]?[0-9]*\.?[0-9])+/g.test(str)) {
+                // potential solution, is where isolate the parts with power
+                // then isolate the exponents and bases
+                let exponentArr;
+                let exponentStrDetected;
+                // filters the powers strings from the non-power strings
+                if (/^([-+]?[0-9]*\.?[0-9]*?[\^][\-+]?[0-9]*?\.?[0-9]*?)+$/.test(str)) {
+                    exponentArr = [str];
+                } else {
+                    exponentStrDetected = /([^\+\-\*\/]\d*?\.?\d*?[^\+\-\*\/])+/g [Symbol.match](str)
+                    exponentArr = exponentStrDetected.filter((x) => {
+                        return /^([-+]?[0-9]*\.?[0-9]*?[\^])+([\-+]?[0-9]*?\.?[0-9]*?)+$/.test(x)
+                    });
+                }
+
+                console.log("exponentStrDetected : " + exponentStrDetected);
+                console.log("exponentArr : " + exponentArr);
+
+                for (let j = 0; j < exponentArr.length; j++) {
+                    exponentDetected = /([-+]?[0-9]*\.?[0-9]+)/g [Symbol.match](exponentArr[j]);
+                    console.log("exponentDetected.length : " + exponentDetected.length);
+                    for (let k = exponentDetected.length - 1; k > 0; k--) {
+                        console.log("exponentDetected.length : " + exponentDetected.length);
+                        let exp = /^([-+]?[0-9]*)$/g.test(exponentDetected[k]) ? parseInt(exponentDetected[k]) :
+                            parseFloat(exponentDetected[k]);
+                        console.log("exp : " + exp)
+                        console.log("exponentDetected.length : " + exponentDetected.length);
+                        let base = /^([-+]?[0-9]*)$/g.test(exponentDetected[k - 1]) ? parseInt(exponentDetected[k - 1]) :
+                            parseFloat(exponentDetected[k - 1]);
+                        testNum = exponentDetected.length;
+                        testNum--;
+                        console.log("base : " + base < 0)
+                        if (base < 0) {
+                            newStr = k === testNum ? -1 * Math.pow(Math.abs(base), exp) : -1 * Math.pow(Math.abs(base), newStr);
+                        } else {
+                            newStr = k === testNum ? Math.pow(Math.abs(base), exp) : Math.pow(Math.abs(base), newStr);
+                        }
+
+                        console.log("newStr : " + typeof newStr);
+                        if (k > 1) {
+                            continue;
+                        }
+                        console.log("newStr : " + newStr);
+                        console.log("typeof newStr : " + typeof newStr);
+                        if (1.628413597910451e-21 < 1e-7) {
+                            console.log("weird case : " + true);
+                        } else {
+                            console.log("weird case : " + false)
+                        }
+                        console.log("newStr % 1 == 0 : " + newStr % 1 == 0);
+                        console.log("str before:  " + str);
+                        str = str.replace(exponentArr[j], newStr % 1 == 0 ? newStr : newStr < 1e-7 ? newStr : parseFloat(newStr).roundSF(12));
+                        console.log("str after:  " + str);
                     }
-                    str = str.replace(/^([-+]?[0-9]*\.?[0-9])+[^]+([-+]?[0-9]*\.?[0-9])+$/g, newStr);
-                    console.log(str);
                 }
                 continue;
             }
             // WARNING THIS HAS NO CONDITION - based on the assumption that it passes down the cascade 
             // Arithmetic operations -> /\(?([-+]?[0-9]*\.?[0-9]+[\/\+\-\*])+([-+]?[0-9]*\.?[0-9]+)\)?/g
             // Floats + Ints -> /^\d+\.\d+$/
+            console.log("Before it hits Eval: " + str);
             str = eval(str);
             console.log("functionUtilized: " + functionUtilized);
             console.log("Last Output: " + str);
             if (functionUtilized !== "") {
-                if (i < 2) {
-                    console.log(str);
-                }
+                let actualNum = /^([-+]?[0-9]*)$/g.test(str) ? parseInt(str) : parseFloat(str);
                 switch (functionUtilized) {
                     case "ln":
                         str = Math.log(str) + "";
@@ -267,13 +358,13 @@ exports.regexTrain = function(string) {
                         str = Math.log10(str) + "";
                         break;
                     case "sin":
-                        str = Math.sin(str) + "";
+                        str = actualNum < Math.pow(10, 16) ? Math.sin(str) + "" : "0"; // return 0 clones the behaviour of the google calculator
                         break;
                     case "cos":
-                        str = Math.cos(str) + "";
+                        str = actualNum < Math.pow(10, 16) ? Math.cos(str) + "" : "0";
                         break;
                     case "tan":
-                        str = Math.tan(str) + "";
+                        str = actualNum < Math.pow(10, 16) ? Math.tan(str) + "" : "0";
                         break;
                 }
                 functionUtilized = "";
@@ -284,16 +375,27 @@ exports.regexTrain = function(string) {
             break;
         }
         while (!/^([-+]?[0-9]*\.*[0-9]+?)$/.test(str) || i == 3 || functionUtilized !== "");
-        string = string.replace(bracketedValue, str) // just use this method for now and we can think of functions after
-        if (/\([^()"]*(?:"[^"]*"[^()"]*)*\)/g.test(string)) {
+        console.log("This is the Str: " + str);
+        string = bracketedValue == "" ? str :
+            string.replace(bracketedValue, str) // just use this method for now and we can think of functions after
+        bracketedValue = "";
+        console.log("Outerloop string: " + string);
+        if (/\([^()"]*(?:"[^"]*"[^()"]*)*\)/g.test(string) || /([!\^\%])/g.test(string)) {
             continue;
         } else {
             break;
         }
     } while (!/^([-+]?[0-9]*\.*[0-9]+?)$/.test(string) || i == 3);
-    // console.log(storedFunction.arithmetic.regex.test(str));
-    // console.log(typeof str, str);
-    return str % 1 === 0 ? eval(str) : eval(str).roundSF(12);
+    console.log("FINAL STRING : " + string);
+
+    if (string == Infinity || string == -Infinity) {
+        return string;
+    }
+    if (typeof string === "string") {
+        string = eval(string);
+        string = /(\.)/.test(string) ? parseFloat(string) : parseInt(string);
+    }
+    return string % 1 === 0 ? eval(string).toString() : string < 1e-7 ? string.toString() : eval(string.roundSF(12)).toString();
 }
 
 

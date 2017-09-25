@@ -1,0 +1,109 @@
+Init Str :0
+Before it hits Eval: 0
+functionUtilized: log
+Last Output: 0
+Init String : log(0)
+Init Str :-Infinity
+Before it hits Eval: -Infinity
+functionUtilized:
+Last Output: -Infinity
+This is the Str: -Infinity
+Outerloop string: -Infinity
+FINAL STRING : string
+null
+    6) Func + Arith
+
+Init String : log(14)/14
+Init Str :14
+Before it hits Eval: 14
+functionUtilized: log
+Last Output: 14
+This is the Str: 1.146128035678238
+Outerloop string: 1.146128035678238/14
+FINAL STRING : string
+null
+    7) Func + Arith
+
+Init String : 13-20*18
+Init Str :13-20*18
+Before it hits Eval: 13-20*18
+functionUtilized:
+Last Output: -347
+This is the Str: -347
+Outerloop string: -347
+FINAL STRING : number
+    9) "Arith" & "Arith"
+
+Init String : (13%)!
+Init Str :13%
+0.13
+This is the Str: 0.13
+Outerloop string: 0.13!
+Init String : 0.13!
+Init Str :0.13!
+str : 0.13!
+newStr : 0.13
+str after: 0.13!
+This is the Str: 0.13
+Outerloop string: 0.13
+FINAL STRING : string
+[ '0.', '0', '', index: 0, input: '0.13' ]
+0.13
+0.100000000000
+0.100000000000 0.13
+    10) "Factor" & "Factor"
+
+Init String : sin(11^20)
+Init Str :11^20
+exponentStrDetected : undefined
+exponentArr : 11^20
+exponentDetected.length : 2
+exponentDetected.length : 2
+exp : 20
+exponentDetected.length : 2
+false
+newStr : number
+newStr : 672749994932560000000
+typeof newStr : number
+weird case : true
+false
+str before:  11^20
+str after:  672749994932560000000
+Init String : sin(11^20)
+Init Str :672749994932560000000
+Before it hits Eval: 672749994932560000000
+functionUtilized: sin
+Last Output: 672749994932560000000
+This is the Str: 0
+Outerloop string: 0
+FINAL STRING : string
+    13) "Power" & "Func"
+Init String : (12/11)^7
+Init Str :12/11
+Before it hits Eval: 12/11
+functionUtilized:
+Last Output: 1.0909090909090908
+This is the Str: 1.0909090909090908
+Outerloop string: 1.0909090909090908^7
+Init String : 1.0909090909090908^7
+Init Str :1.0909090909090908^7
+exponentStrDetected : undefined
+exponentArr : 1.0909090909090908^7
+exponentDetected.length : 2
+exponentDetected.length : 2
+exp : 7
+exponentDetected.length : 2
+false
+newStr : number
+newStr : 1.8387383166083973
+typeof newStr : number
+weird case : true
+false
+str before:  1.0909090909090908^7
+null
+str after:  1.83873831661
+This is the Str: 1.83873831661
+Outerloop string: 1.83873831661
+FINAL STRING : string
+null
+    14) "Arith" & "Power"
