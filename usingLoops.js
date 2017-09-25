@@ -1,22 +1,52 @@
-// function convertSymbol() {
-//     return this
-//         .replace(/(\d*?\.?\d*?)(e)/g, (match, p1, p2) => {
-//             return p1 == '' ? Math.E : p1 + '*' + Math.E;
-//         })
-//         .replace(/(\d*?\.?\d*?)(π)/g, (match, p1, p2) => {
-//             return p1 == '' ? Math.PI : p1 + '*' + Math.PI;
-//         });
-// }
-// String.prototype.convertSymbol = convertSymbol;
+const factorial = num => {
+    if (typeof num !== "number" || isNaN(num)) {
+        return NaN;
+    }
+    if (!(num % 1 === 0)) {
+        return num;
+    }
+    // The decision was to make the Max number of calls to the stack being under 10000, such as Chrome 11034, Firefox 50994
+    else if (num > 10000) {
+        return Infinity;
+    }
+    let val = 1;
+    const calcFactorial = num => {
+        if (num > 1) {
+            val *= num;
+            num--;
+            console.log(num);
+            return calcFactorial(num);
+        }
+        return val === 0 ? 1 : val;
+    };
+    return calcFactorial(num);
+};
 
-// String.prototype.returnThis = returnThis;
-const string = "2e";
-const pi = "2π";
-// const complexString = "((3+4)+cos(2π)+ln(2e))";
-const dualComplexString = "2e+e-3e*5π";
-console.log(dualComplexString.convertTransdentalNum());;
-// console.log(complexString.returnThis("cos"));
-//regexp[Symbol.match](str)
+console.log(factorial(14.12));
+
+// function convertTransdentalNum(str) {
+//     // return str;
+
+//     if (/(e)/g.test(str)) {
+//         str = /\be\b/g.test(str) ? str.replace(/(e)/g, Math.E) : str.replace(/(\d*?\.?\d*?)[e]/g, /(\d*?\.?\d*?)[e]/g.exec(str)[1] + "*" + Math.E);
+//     }
+//     if (/(π)/g.test(str)) {
+//         str = str.replace(/π/g, 'pi');
+//         console.log(str);
+//         console.log(/(\d*?\.?\d*?)[pi]/g);
+//         str = /\bpi\b/g.test(str) ? str.replace(/(pi)/g, Math.PI) : str.replace(/(\d*?\.?\d*?)(pi)/g, /(\d*?\.?\d*?)(pi)/g.exec(str)[1] + "*" + Math.PI);
+//     }
+//     return str;
+// }
+// String.prototype.convertTransdentalNum = convertTransdentalNum;
+// const string = "e";
+// const pi = "π";
+// const complexString = "((3+4)+cos(2π)+ln(2e))"
+// const complexString2 = "((3+4)+cos(2+2π)+ln(2e/2))"
+// console.log(convertTransdentalNum(pi));;
+// console.log(convertTransdentalNum(string));;
+// console.log(convertTransdentalNum(complexString));
+// console.log(convertTransdentalNum(complexString2));
 
 // let str = "4.5^.2^.3^5.2"
 // exponentDetected = /([-+]?[0-9]*\.?[0-9]+)/g [Symbol.match](str);

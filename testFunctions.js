@@ -60,7 +60,7 @@ const storedFunction = {
 const prioritise = regexUsed;
 
 
-describe.skip("BASIC ARITHMETIC TESTS =>", function() {
+describe.only("BASIC ARITHMETIC TESTS =>", function() {
     const testCases = [{
             name: "Addition [Int]",
             value: '3+4',
@@ -111,128 +111,79 @@ describe.skip("BASIC ARITHMETIC TESTS =>", function() {
 
 describe.only("INDIVIDUAL FUNCTION + CONSTANT TESTS =>", function() {
     // all decimal values are kept to 4 d.p.
-    const testCases = [
-        // {
-        //     name: "Factorial Int",
-        //     value: '5!',
-        //     expected: 120
-        // },
-        // // Factorial Float requires advanced mathematical knowledge
-        // {
-        //     name: "Percentage [Int] Conversion",
-        //     value: '150%',
-        //     expected: 1.5
-        // },
-        // {
-        //     name: "Percentage [Float] Conversion",
-        //     value: '150.1%',
-        //     expected: 1.501
-        // },
-        // {
-        //     name: "Pi Constant",
-        //     value: 'π',
-        //     expected: 3.141592654
-        // },
-        // {
-        //     name: "Euler's Constant",
-        //     value: 'e',
-        //     expected: 2.718281828
-        // },
-        //By default, radian is utilized for trigonometric functions
-        // {
-        //     name: "Sine [Int]",
-        //     value: 'sin(π/2)',
-        //     expected: 1
-        // },
+    const testCases = [{
+            name: "Factorial Int",
+            value: '5!',
+            expected: 120
+        },
+        // Factorial Float requires advanced mathematical knowledge
+        {
+            name: "Percentage [Int] Conversion",
+            value: '150%',
+            expected: 1.5
+        },
+        {
+            name: "Percentage [Float] Conversion",
+            value: '150.1%',
+            expected: 1.501
+        },
+        {
+            name: "Pi Constant",
+            value: 'π',
+            expected: 3.14159265359
+        },
+        {
+            name: "Euler's Constant",
+            value: 'e',
+            expected: 2.71828182846
+        },
+        // By default, radian is utilized for trigonometric functions
+        {
+            name: "Sine [Int]",
+            value: 'sin(π/2)',
+            expected: 1
+        },
         {
             name: "Sine [Float]",
             value: 'sin((π+2)/2)',
             // π+2 => 5.14159265359; (π+2)/2 => 2.57079632679
-            expected: 0.540302306
+            expected: 0.540302305868
         },
         {
             name: "Cosine [Int]",
             value: 'cos(2π)',
             expected: 1
-        }, {
+        },
+        {
             name: "Cosine [Float]",
             value: 'cos((π+2)/2)',
-            expected: -0.841470985
+            expected: -0.841470984808
+                //
         }, {
             name: "Tangent [Int]",
             value: 'tan(π/4)',
             expected: 1
         }, {
-            name: "Tangent [Int]",
+            name: "Tangent [Float]",
             value: 'tan((π+2)/4)',
-            expected: 3.408223442
+            expected: 3.40822344234
         }, {
             name: "Log [Int]",
             value: 'log(1000)',
             expected: 3
         },
-        // {
-        //     name: "Log [Float]",
-        //     value: 'log(45.2)',
-        //     expected: 1.655138435
-        // }, {
-        //     name: "Natural Log [Int]",
-        //     value: 'ln(2)',
-        //     expected: 0.693147181
-        // }, {
-        //     name: "Natural Log [Float]",
-        //     value: 'ln(45.2)',
-        //     expected: 3.811097087
-        // }
-    ];
-    for (let i = 0; i < testCases.length; i++) {
-        it(testCases[i].name, function() {
-            assert.equal(prioritise(testCases[i].value), testCases[i].expected, "Expected prioritise(" + testCases[i].value + ") to return " + testCases[i].expected);
-        });
-    }
-});
-
-describe.skip("POWER INDEX TESTS =>", function() {
-    // all decimal values are kept to 4 d.p.
-    const testCases = [{
-            name: "Power Base [Int] Index [Int]",
-            value: "2^3",
-            expected: 8
-        },
         {
-            name: "Power Base [Float] Index [Float]",
-            value: "2.5^3.1",
-            expected: 17.1243
-        },
-        {
-            name: "Power Base Multiple Index [Float]",
-            value: "2.5^3.1^1.7",
-            expected: 529.0930
-        },
-        {
-            name: "Power Base Multiple Index [Float]",
-            value: "2.5^3.1^1.7",
-            expected: 529.0930
-        },
-        {
-            name: "Square Root [Int]",
-            value: "4^0.5",
-            expected: 2
-        },
-        {
-            name: "Square Root [Float]",
-            value: "45.2^0.5",
-            expected: 6.7231
-        },
-        {
-            name: "Exponent [Int]",
-            value: "10 ^ 2",
-            expected: 100
-        },
-        {
-            name: "Exponent [Float]",
-            value: "10^0.6",
-            expected: 3.9811
+            name: "Log [Float]",
+            value: 'log(45.2)',
+            expected: 1.65513843481
+        }, {
+            name: "Natural Log [Int]",
+            value: 'ln(2)',
+            expected: 0.693147180560
+        }, {
+            name: "Natural Log [Float]",
+            value: 'ln(45.2)',
+            expected: 3.81109708684
         }
     ];
     for (let i = 0; i < testCases.length; i++) {
@@ -242,21 +193,126 @@ describe.skip("POWER INDEX TESTS =>", function() {
     }
 });
 
+describe.only("POWER INDEX TESTS =>", function() {
+    // all decimal values are kept to 4 d.p.
+    const testCases = [{
+            name: "Power Base [Int] Index [Int]",
+            value: "2^3",
+            expected: 8
+        },
+        {
+            name: "Power Base [Float] Index [Float]",
+            value: "2.5^3.1",
+            expected: 17.1243472873
+        },
+        {
+            name: "Power Base Multiple Index [Float]",
+            value: "2.5^3.1^1.7",
+            expected: 529.092997828
+        },
+        {
+            name: "Square Root [Int]",
+            value: "4^0.5",
+            expected: 2
+        },
+        {
+            name: "Square Root [Float]",
+            value: "45.2^0.5",
+            expected: 6.72309452559
+        },
+        {
+            name: "Exponent [Int]",
+            value: "10^2",
+            expected: 100
+        },
+        {
+            name: "Exponent [Float]",
+            value: "10^0.6",
+            expected: 3.98107170553
+        }
+    ];
+    for (let i = 0; i < testCases.length; i++) {
+        it(testCases[i].name, function() {
+            assert.equal(prioritise(testCases[i].value), testCases[i].expected, "Expected prioritise(" + testCases[i].value + ") to return " + testCases[i].expected);
+        });
+    }
+    it("5.6+3.3^2.5^1.7/7.8^4.5/6.7-9.8", function() {
+        assert.equal(prioritise("5.6+3.3^2.5^1.7/7.8^4.5/6.7-9.8"), -4.19581850381)
+    });
+    it("2^3", function() {
+        assert.equal(prioritise("2^3"), "8")
+    });
+    it("3.3^2.5^1.7/6.7-9.8", function() {
+        assert.equal(prioritise("3.3^2.5^1.7/6.7-9.8"), 33.4272310234)
+    });
+    it("-2^-3", function() {
+        assert.equal(prioritise("-2^-3"), "-0.125")
+    });
+    it("-2.5^-3.6", function() {
+        assert.equal(prioritise("-2.5^-3.6"), "-0.036933117591")
+    });
+    it("-2.5^-3.6-2.4", function() {
+        assert.equal(prioritise("-2.5^-3.6^-2.4"), "-0.958529198614")
+    });
+    it("10^1-5", function() {
+        assert.equal(prioritise("10^1-5"), "5")
+    });
+    it("10^2-5", function() {
+        assert.equal(prioritise("10^2-5"), "95")
+    });
+    it("10^1+5", function() {
+        assert.equal(prioritise("10^1+5"), "15")
+    });
+    it("10^2+5", function() {
+        assert.equal(prioritise("10^2+5"), "105")
+    });
+});
+
 describe.skip("2 COMBINATION FEATURES =>", function() {
 
     // Set Tests
-    const testCases = [{
+    const testCases = true ? [{
         name: "Factor + Func",
         value: "log(10!)",
-        expected: 6.5598
-    }];
+        expected: 6.55976303288
+    }, {
+        name: "Func + Arith",
+        value: "log(log(1))",
+        expected: -Infinity
+    }, {
+        name: "Func + Arith",
+        value: "ln(13/11)",
+        expected: 0.167054084663
+    }, {
+        name: "Func + Arith",
+        value: "log(14)/14",
+        expected: 0.081866288263
+    }, {
+        name: "Factor [Float]",
+        value: "14.12!",
+        expected: 14.12
+    }, {
+        name: "Percent [Float]",
+        value: "14.12%",
+        expected: 0.1412
+    }, ] : [{
+            name: "Func + Arith",
+            value: "(15%)!",
+            expected: 0.15
+        },
+        // {
+        //     name: "Func + Arith",
+        //     value: "15!%",
+        //     expected: 13076743680
+        // },
+    ];
     for (let i = 0; i < testCases.length; i++) {
         it(testCases[i].name, function() {
             assert.equal(prioritise(testCases[i].value), testCases[i].expected);
         });
     }
     // Random Tests
-    const randomTestCase = 9;
+    const randomTestCase = 10;
 
     const randomTestGroup = () => {
         const testGroup = [
@@ -324,9 +380,9 @@ describe.skip("2 COMBINATION FEATURES =>", function() {
                 case "Arith":
                     // You can get a + b or b + a combinations, where '+' is also representative of the other arithmetic operators '-', '*', '/' 
                     if (endStr === "") {
-                        endStr = value[i] + " " + feature[i].unit + " " + value[i + 1];
+                        endStr = value[i] + feature[i].unit + value[i + 1];
                     } else {
-                        halfChance ? endStr = endStr + " " + feature[i].unit + " " + value[i + 1] : endStr = value[i + 1] + " " + feature[i].unit + " " + endStr;
+                        halfChance ? endStr = endStr + feature[i].unit + value[i + 1] : endStr = value[i + 1] + feature[i].unit + endStr;
                     }
                     if (calculateTotal === 0) {
                         calculateTotal = value[i] + feature[i].unit + value[i + 1]
@@ -360,7 +416,7 @@ describe.skip("2 COMBINATION FEATURES =>", function() {
     }
 });
 
-describe.skip("3 COMBINATION FEATURES =>", function() {
+describe.only("3 COMBINATION FEATURES =>", function() {
 
     // Set Tests
     const testCases = [{
@@ -374,7 +430,7 @@ describe.skip("3 COMBINATION FEATURES =>", function() {
         });
     }
     // Random Tests
-    const randomTestCase = 300;
+    const randomTestCase = 10;
 
     const testGroup = [
         { unitName: "Factor", testUnit: ["!", "%"], method: [factorial, percentage] },
@@ -436,9 +492,7 @@ describe.skip("3 COMBINATION FEATURES =>", function() {
                 case "Arith":
                     // You can get a + b or b + a combinations, where '+' is also representative of the other arithmetic operators '-', '*', '/' 
                     if (endStr === "") {
-                        endStr = value[i] + " " + feature[i].unit + " " + value[i + 1];
-                    } else {
-                        endStr = endStr + " " + feature[i].unit + " " + value[i];
+                        endStr = value[i] + value[i];
                     }
                     if (calculateTotal === 0) {
                         calculateTotal = value[i] + feature[i].unit + value[i + 1]
@@ -471,91 +525,103 @@ describe.skip("3 COMBINATION FEATURES =>", function() {
     }
 });
 
-describe.skip("SPECIFIC FEATURE =>", function() {
+describe.only("ROUNDING FEATURE =>", function() {
 
-    const testGroup = [
-        { unitName: "Factor", testUnit: ["!", "%"], method: [factorial, percentage] },
-        { unitName: "Power", testUnit: ["^"], method: [Math.pow] },
-        { unitName: "Func", testUnit: ["sin(", "cos(", "tan(", "ln(", "log("], method: [Math.sin, Math.cos, Math.tan, Math.log, Math.log10] },
-        { unitName: "Arith", testUnit: ["+", "-", "*", "/"], method: [] }
-    ];
-    let calculateTotal = 0;
+    const testCase = [{
+        name: "0.9999999999999999", //16
+        value: "0.9999999999999999",
+        expected: 1
+    }, {
+        name: "0.999999999999999", //15
+        value: "0.999999999999999",
+        expected: 1
+    }, {
+        name: "0.99999999999999", //14
+        value: "0.99999999999999",
+        expected: 1
+    }, {
+        name: "0.9999999999999", //13
+        value: "0.9999999999999",
+        expected: 1
+    }, {
+        name: "0.999999999999", //12
+        value: "0.999999999999",
+        expected: 1
+    }, {
+        name: "0.99999999999", //11
+        value: "0.99999999999",
+        expected: 1
+    }, {
+        name: "0.9999999999", //10
+        value: "0.9999999999",
+        expected: 1
+    }, {
+        name: "0.999999999", //9
+        value: "0.999999999",
+        expected: 1
+    }, {
+        name: "0.99999999", //8
+        value: "0.99999999",
+        expected: 1
+    }, {
+        name: "0.99999", //5
+        value: "0.99999",
+        expected: 1
+    }, {
+        name: "2.99999", //5
+        value: "2.99999",
+        expected: 3
+    }, {
+        name: "20.99999", //5
+        value: "20.99999",
+        expected: 21
+    }, {
+        name: "20.99000000000", //5
+        value: "20.99",
+        expected: 20.99
+    }, {
+        name: "20000", //5
+        value: "200000",
+        expected: 200000
+    }, {
+        name: "2000000", //5
+        value: "2000000",
+        expected: 2000000
+    }, {
+        name: "2000000000000000000000", //5
+        value: "2000000000000000000000",
+        expected: 2e+21
+    }, ];
 
-    const createTestCase = () => {
-        let angleUnits = toggleAngle("Radian");
-        let i = 0;
-        let k = 3;
-        let value = [4, 12, 2];
-        let feature = [{
-                name: testGroup[3].unitName,
-                unit: testGroup[3].testUnit[0],
-                method: testGroup[3].method[0]
-            },
-            {
-                name: testGroup[1].unitName,
-                unit: testGroup[1].testUnit[1],
-                method: testGroup[1].method[1]
-            },
-            {
-                name: testGroup[3].unitName,
-                unit: testGroup[3].testUnit[1],
-                method: testGroup[3].method[1]
-            },
-            {
-                name: testGroup[1].unitName,
-                unit: testGroup[1].testUnit[1],
-                method: testGroup[1].method[1]
-            }
-        ]
-
-
-        let testValue = () => {
-            switch (feature[i].name) {
-                case "Factor":
-                    // a! or (a + b)!
-                    calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i]) : calculateTotal = feature[i].method(calculateTotal);
-                    break;
-                case "Func":
-                    // f(x)
-                    if (feature[i].unit === "sin(" || feature[i].unit === "cos(" || feature[i].unit === "tan(") {
-                        calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(angleUnits * value[i]) : calculateTotal = feature[i].method(angleUnits * calculateTotal);
-                    } else {
-                        calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i]) : calculateTotal = feature[i].method(calculateTotal);
-                    }
-                    break;
-                case "Power":
-                    // a ^ y or (a + b) ^ y
-                    calculateTotal = calculateTotal === 0 ? calculateTotal = feature[i].method(value[i], value[i + 1]) : calculateTotal = feature[i].method(calculateTotal, value[i + 1]);
-                    break;
-                case "Arith":
-                    // You can get a + b or b + a combinations, where '+' is also representative of the other arithmetic operators '-', '*', '/' 
-                    if (calculateTotal === 0) {
-                        calculateTotal = value[i] + feature[i].unit + value[i + 1]
-                    } else {
-                        calculateTotal = calculateTotal + feature[i].unit + value[i];
-                        console.log(calculateTotal)
-                    }
-                    break;
-            }
-            if (feature[i + 1].name !== "Arith") {
-                calculateTotal = eval(calculateTotal);
-            }
-            i++;
-            return i == k ? calculateTotal : testValue();
-        }
-        return testValue();
+    for (let i = 0; i < testCase.length; i++) {
+        it(testCase[i].name, function() {
+            assert.equal(prioritise(testCase[i].value), testCase[i].expected);
+        });
     }
-    let newCase = createTestCase();
+});
+
+describe.only("SPECIFIC FEATURE =>", function() {
 
     const testCase = {
-        name: "Fix Error => 'cos(4 + 12) - 2' to equal NaN",
-        value: "'cos(4 + 12) - 2'",
-        expected: newCase
+        name: "(12/11)^7",
+        value: "(12/11)^7",
+        expected: 0.19917907876332352
     };
     it(testCase.name, function() {
         assert.equal(prioritise(testCase.value), testCase.expected);
     });
 });
+
+
+/*
+{
+        name: "log(log(1))",
+        value: "log(log(1))",
+        expected: -Infinity
+    }
+
+
+*/
 
 // {
 //     name: "Degrees [Int] To Radian Conversion ",

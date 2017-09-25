@@ -1,55 +1,3 @@
-(function() {
-    /**
-     * Decimal adjustment of a number.
-     *
-     * @param {String}  type  The type of adjustment.
-     * @param {Number}  value The number.
-     * @param {Integer} exp   The exponent (the 10 logarithm of the adjustment base).
-     * @returns {Number} The adjusted value.
-     */
-    function decimalAdjust(type, value, exp) {
-        // If the exp is undefined or zero...
-        if (typeof exp === 'undefined' || +exp === 0) {
-            return Math[type](value);
-        }
-        value = +value;
-        exp = +exp;
-        // If the value is not a number or the exp is not an integer...
-        if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
-            return NaN;
-        }
-        // If the value is negative...
-        if (value < 0) {
-            return -decimalAdjust(type, -value, exp);
-        }
-        // Shift
-        value = value.toString().split('e');
-        value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
-        // Shift back
-        value = value.toString().split('e');
-        return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
-    }
-
-    // Decimal round
-    if (!Math.round10) {
-        Math.round10 = function(value, exp) {
-            return decimalAdjust('round', value, exp);
-        };
-    }
-    // Decimal floor
-    if (!Math.floor10) {
-        Math.floor10 = function(value, exp) {
-            return decimalAdjust('floor', value, exp);
-        };
-    }
-    // Decimal ceil
-    if (!Math.ceil10) {
-        Math.ceil10 = function(value, exp) {
-            return decimalAdjust('ceil', value, exp);
-        };
-    }
-})();
-
 const mocha = require('mocha');
 const assert = require('chai').assert;
 
@@ -57,6 +5,9 @@ const assert = require('chai').assert;
 const factorial = num => {
     if (typeof num !== "number" || isNaN(num)) {
         return NaN;
+    }
+    if (!(num % 1 === 0)) {
+        return num;
     }
     // The decision was to make the Max number of calls to the stack being under 10000, such as Chrome 11034, Firefox 50994
     else if (num > 10000) {
@@ -148,16 +99,131 @@ const captureLoopedValues = (timesLoop, element) => {
     }
 }
 
-function convertSymbol() {
-    return this
-        .replace(/(\d*?\.?\d*?)(e)/g, (match, p1, p2) => {
-            return p1 == '' ? Math.E : p1 + '*' + Math.E;
-        })
-        .replace(/(\d*?\.?\d*?)(π)/g, (match, p1, p2) => {
-            return p1 == '' ? Math.PI : p1 + '*' + Math.PI;
-        });
+function convertSymbol(str) {
+    // return str;
+
+    if (/(e)/g.test(str)) {
+        str = /\be\b/g.test(str) ? str.replace(/(e)/g, Math.E) : str.replace(/(\d*?\.?\d*?)[e]/g, /(\d*?\.?\d*?)[e]/g.exec(str)[1] + "*" + Math.E);
+    }
+    if (/(π)/g.test(str)) {
+        str = str.replace(/π/g, 'pi');
+        str = /\bpi\b/g.test(str) ? str.replace(/(pi)/g, Math.PI) : str.replace(/(\d*?\.?\d*?)(pi)/g, /(\d*?\.?\d*?)(pi)/g.exec(str)[1] + "*" + Math.PI);
+    }
+    return str;
 }
-String.prototype.convertSymbol = convertSymbol;
+
+// Utilized another persons solution from StackOverFlow
+// Profile: https://stackoverflow.com/users/1253087/lcoderre
+// Solution: https://stackoverflow.com/questions/24085277/rounding-to-significant-figures-missing-zeros
+
+function roundSF(significantFig) {
+    // Match every "leading zeros" before and after the .
+
+    if (this == Infinity || this == -Infinity) {
+        return this;
+    }
+    // Numbers with digits 1e+20 & beyond are automatically converted to exponential numbers, via the eval function
+    if (this >= 1e+20) {
+        return eval(this);
+    }
+    // Decimal numbers that contain many zeros at the end of it
+    if (/0/g.test(/(0*$)/ [Symbol.match](this.toString())[0])) {
+        console.log("Array Length 0's : " + /0/g.test(/(0*$)/ [Symbol.match](this.toString())[0]));
+        return this % 1 === 0 ? eval(this) : parseFloat(this.toString().replace(/(0)/, ""));
+    }
+    // Decimal numbers that contain many nines at the end of it
+
+    if (/9/g.test(/(9*$)/ [Symbol.match](this.toString())[0])) {
+        console.log("I should see this : " + this)
+        if (/(9*$)/ [Symbol.match](this.toString())[0].length >= 3) {
+            let strEndNine = this.toString();
+            let num = strEndNine.match(/(\d9*)$/)[0][0];
+            if (num === "9") {
+                console.log("if")
+                console.log(parseInt(strEndNine.split(".")[0]));
+                return parseInt(strEndNine.split(".")[0]) + 1;
+
+            } else {
+                console.log("else");
+                let index = strEndNine.indexOf(num);
+                let numAtIndex = strEndNine[strEndNine.indexOf(num)];
+                let indexNum = parseInt(num) + 1;
+                let afterDecimal = strEndNine.slice(strEndNine.indexOf(".") + 1).replace(/(9*)$/, "")
+                return strEndNine.slice(0, index) + strEndNine.slice(index, afterDecimal.length + 1) + indexNum;
+            }
+        } else {
+            return this;
+        }
+    }
+
+    var matches = this.toString().match(/^-?(0+)\.(0*)/);
+    console.log(matches);
+    // starting with "0."
+
+    function decimalAdjust(type, value, exp) {
+        // If the exp is undefined or zero...
+        if (typeof exp === 'undefined' || +exp === 0) {
+            return Math[type](value);
+        }
+        value = +value;
+        exp = +exp;
+        // If the value is not a number or the exp is not an integer...
+        if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+            return NaN;
+        }
+        // If the value is negative...
+        if (value < 0) {
+            return -decimalAdjust(type, -value, exp);
+        }
+        // Shift
+        value = value.toString().split('e');
+        value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+        // Shift back
+        value = value.toString().split('e');
+        return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+    }
+
+    // Decimal round
+    if (!Math.round10) {
+        Math.round10 = function(value, exp) {
+            return decimalAdjust('round', value, exp);
+        };
+    }
+
+
+    if (matches) {
+        var firstIndex = matches[0].length;
+        var prefix = matches[0];
+
+        sf = Number(this.toString().substring(firstIndex, firstIndex + significantFig + 1));
+        sf = Math.round(sf / 10);
+        sf = prefix + sf.toString();
+        // get rid of 0.9, 0.09, 0.009 etc rounding error
+
+        negateRoundError = Number(sf).toFixed(matches[2].length + significantFig);
+        console.log(matches.input);
+        console.log(negateRoundError.toString());
+
+        // if (matches.input >= .15 && matches.input < 0.2) {
+        //     return matches.input;
+        // }
+
+        //return;
+        // return negateRoundError / matches.input;
+        console.log(negateRoundError, matches.input);
+        return negateRoundError < matches.input ? Math.round10(matches.input, -12) : (negateRoundError / matches.input) >= (0.2 + Math.pow(1, -100)) / 0.15 ? negateRoundError : matches.input;
+    }
+
+    // starting with something else like -5.574487436097115
+    else {
+        matches = this.toString().match(/^(-?(\d+))\.(\d+)/);
+        var decimalShift = significantFig - matches[2].length;
+        var rounded = Math.round(this * Math.pow(10, decimalShift));
+        rounded /= Math.pow(10, decimalShift);
+        return rounded.toFixed(decimalShift);
+    }
+}
+Number.prototype.roundSF = roundSF;
 
 exports.regexTrain = function(string) {
 
@@ -169,7 +235,7 @@ exports.regexTrain = function(string) {
     let str = "";
     let bracketedValue = "";
 
-    string = string.convertSymbol();
+    string = convertSymbol(string);
     do {
         // console.log(string);
         let functionUtilized = "";
@@ -184,20 +250,25 @@ exports.regexTrain = function(string) {
         } else {
             str = string;
         }
-        console.log(functionUtilized);
-        console.log(bracketedValue);
-
+        // console.log(functionUtilized);
+        // console.log(bracketedValue);
+        // console.log(str);
         do {
+            console.log("Init String : " + string);
+            console.log("Init Str :" + str);
             i++;
-            if (storedFunction.factorial.regex.test(str)) {
+            if (/([-+]?[0-9]*\.?[0-9]+[\!])/g.test(str)) {
+                console.log("str : " + str)
                 factorialDetected = /([-+]?[0-9]*\.?[0-9]+[\!])/g [Symbol.match](str);
                 for (let j = 0; j < factorialDetected.length; j++) {
                     let value = /^([-+]?[0-9]*[\!])$/g.test(factorialDetected[j]) ? parseInt(/([-+]?[0-9]*[\!])/g.exec(factorialDetected[j])[0]) :
                         parseFloat(/([-+]?[0-9]*\.?[0-9]+[\!])/g.exec(factorialDetected[j])[0]);
                     // console.log(value);
                     newStr = factorial(value) + "";
-                    // console.log(newStr);
+                    console.log("newStr : " + newStr);
+                    console.log("str after: " + str);
                     str = str.replace(/([0-9]*\.?[0-9]+[\!])/, newStr);
+
                 }
                 continue;
             }
@@ -213,31 +284,72 @@ exports.regexTrain = function(string) {
                 }
                 continue;
             }
-            if (/^([-+]?[0-9]*\.?[0-9])+[^]+([-+]?[0-9]*\.?[0-9])+$/g.test(str) && !/\(?([-+]?[0-9]*\.?[0-9]+[\/\+\-\*])+([-+]?[0-9]*\.?[0-9]+)\)?/g.test(str) && !/^\d+?\.?\d+?$/.test(str)) {
-                console.log("I should not see this");
-                exponentDetected = /([-+]?[0-9]*\.?[0-9]+)/g [Symbol.match](str);
-                for (let j = exponentDetected.length - 1; j > 0; j--) {
-                    console.log(j);
-                    let exp = /^([-+]?[0-9]*[\%])$/g.test(exponentDetected[j]) ? parseInt(exponentDetected[j]) :
-                        parseFloat(exponentDetected[j]);
-                    let base = /^([-+]?[0-9]*[\%])$/g.test(exponentDetected[j - 1]) ? parseInt(exponentDetected[j - 1]) :
-                        parseFloat(exponentDetected[j - 1]);
-                    newStr = j == exponentDetected.length - 1 ? Math.pow(base, exp) : Math.pow(base, newStr);
+            if (/([-+]?[0-9]*\.?[0-9])+[\^]+([-+]?[0-9]*\.?[0-9])+/g.test(str)) {
+                // potential solution, is where isolate the parts with power
+                // then isolate the exponents and bases
+                let exponentArr;
+                let exponentStrDetected;
+                // filters the powers strings from the non-power strings
+                if (/^([-+]?[0-9]*\.?[0-9]*?[\^][\-+]?[0-9]*?\.?[0-9]*?)+$/.test(str)) {
+                    exponentArr = [str];
+                } else {
+                    exponentStrDetected = /([^\+\-\*\/]\d*?\.?\d*?[^\+\-\*\/])+/g [Symbol.match](str)
+                    exponentArr = exponentStrDetected.filter((x) => {
+                        return /^([-+]?[0-9]*\.?[0-9]*?[\^])+([\-+]?[0-9]*?\.?[0-9]*?)+$/.test(x)
+                    });
+                }
 
-                    if (j > 1) {
-                        continue;
+                console.log("exponentStrDetected : " + exponentStrDetected);
+                console.log("exponentArr : " + exponentArr);
+
+                for (let j = 0; j < exponentArr.length; j++) {
+                    exponentDetected = /([-+]?[0-9]*\.?[0-9]+)/g [Symbol.match](exponentArr[j]);
+                    console.log("exponentDetected.length : " + exponentDetected.length);
+                    for (let k = exponentDetected.length - 1; k > 0; k--) {
+                        console.log("exponentDetected.length : " + exponentDetected.length);
+                        let exp = /^([-+]?[0-9]*)$/g.test(exponentDetected[k]) ? parseInt(exponentDetected[k]) :
+                            parseFloat(exponentDetected[k]);
+                        console.log("exp : " + exp)
+                        console.log("exponentDetected.length : " + exponentDetected.length);
+                        let base = /^([-+]?[0-9]*)$/g.test(exponentDetected[k - 1]) ? parseInt(exponentDetected[k - 1]) :
+                            parseFloat(exponentDetected[k - 1]);
+                        testNum = exponentDetected.length;
+                        testNum--;
+                        console.log("base : " + base < 0)
+                        if (base < 0) {
+                            newStr = k === testNum ? -1 * Math.pow(Math.abs(base), exp) : -1 * Math.pow(Math.abs(base), newStr);
+                        } else {
+                            newStr = k === testNum ? Math.pow(Math.abs(base), exp) : Math.pow(Math.abs(base), newStr);
+                        }
+
+                        console.log("newStr : " + typeof newStr);
+                        if (k > 1) {
+                            continue;
+                        }
+                        console.log("newStr : " + newStr);
+                        console.log("typeof newStr : " + typeof newStr);
+                        if (1.628413597910451e-21 < 1e-7) {
+                            console.log("weird case : " + true);
+                        } else {
+                            console.log("weird case : " + false)
+                        }
+                        console.log("newStr % 1 == 0 : " + newStr % 1 == 0);
+                        console.log("str before:  " + str);
+                        str = str.replace(exponentArr[j], newStr % 1 == 0 ? newStr : newStr < 1e-7 ? newStr : parseFloat(newStr).roundSF(12));
+                        console.log("str after:  " + str);
                     }
-                    str = str.replace(/^([-+]?[0-9]*\.?[0-9])+[^]+([-+]?[0-9]*\.?[0-9])+$/g, newStr);
-
                 }
                 continue;
             }
             // WARNING THIS HAS NO CONDITION - based on the assumption that it passes down the cascade 
             // Arithmetic operations -> /\(?([-+]?[0-9]*\.?[0-9]+[\/\+\-\*])+([-+]?[0-9]*\.?[0-9]+)\)?/g
             // Floats + Ints -> /^\d+\.\d+$/
-
+            console.log("Before it hits Eval: " + str);
             str = eval(str);
+            console.log("functionUtilized: " + functionUtilized);
+            console.log("Last Output: " + str);
             if (functionUtilized !== "") {
+                let actualNum = /^([-+]?[0-9]*)$/g.test(str) ? parseInt(str) : parseFloat(str);
                 switch (functionUtilized) {
                     case "ln":
                         str = Math.log(str) + "";
@@ -246,32 +358,44 @@ exports.regexTrain = function(string) {
                         str = Math.log10(str) + "";
                         break;
                     case "sin":
-                        str = Math.sin(str) + "";
+                        str = actualNum < Math.pow(10, 16) ? Math.sin(str) + "" : "0"; // return 0 clones the behaviour of the google calculator
                         break;
                     case "cos":
-                        str = Math.cos(str) + "";
+                        str = actualNum < Math.pow(10, 16) ? Math.cos(str) + "" : "0";
                         break;
                     case "tan":
-                        str = Math.tan(str) + "";
+                        str = actualNum < Math.pow(10, 16) ? Math.tan(str) + "" : "0";
                         break;
                 }
-                // 
+                functionUtilized = "";
+                // console.log(str);
                 str = str.replace(bracketedValue, str);
                 continue;
             }
             break;
         }
-        while (!/^([-+]?[0-9]*\.*[0-9]+?)$/.test(str) || i == 3);
-        string = string.replace(bracketedValue, str) // just use this method for now and we can think of functions after
-        if (/\([^()"]*(?:"[^"]*"[^()"]*)*\)/g.test(string)) {
+        while (!/^([-+]?[0-9]*\.*[0-9]+?)$/.test(str) || i == 3 || functionUtilized !== "");
+        console.log("This is the Str: " + str);
+        string = bracketedValue == "" ? str :
+            string.replace(bracketedValue, str) // just use this method for now and we can think of functions after
+        bracketedValue = "";
+        console.log("Outerloop string: " + string);
+        if (/\([^()"]*(?:"[^"]*"[^()"]*)*\)/g.test(string) || /([!\^\%])/g.test(string)) {
             continue;
         } else {
             break;
         }
     } while (!/^([-+]?[0-9]*\.*[0-9]+?)$/.test(string) || i == 3);
-    // console.log(storedFunction.arithmetic.regex.test(str));
-    // console.log(typeof str, str);
-    return /\(?([-+]?[0-9]*\.?[0-9]+[\/\+\-\*])+([-+]?[0-9]*\.?[0-9]+)\)?/g.test(str) ? Math.round10(eval(str), -9) : Math.round10(eval(str), -9);
+    console.log("FINAL STRING : " + string);
+
+    if (string == Infinity || string == -Infinity) {
+        return string;
+    }
+    if (typeof string === "string") {
+        string = eval(string);
+        string = /(\.)/.test(string) ? parseFloat(string) : parseInt(string);
+    }
+    return string % 1 === 0 ? eval(string).toString() : string < 1e-7 ? string.toString() : eval(string.roundSF(12)).toString();
 }
 
 
