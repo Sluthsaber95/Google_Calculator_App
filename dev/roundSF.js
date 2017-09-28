@@ -8,10 +8,8 @@ const assert = require('chai').assert;
 // Needed to utilize another solution, for the .9 error
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/round
 
-function roundSF(significantFig) {
-    console.log("0 detection : " + /0/g.test(/(0*$)/ [Symbol.match](this.toString())[0]));
-    console.log("9 detection : " + this.toString());
-    // Match every "leading zeros" before and after the .
+function roundSF(num, significantFig) {
+
 
     function decimalAdjust(type, value, exp) {
         // If the exp is undefined or zero...
@@ -43,32 +41,30 @@ function roundSF(significantFig) {
         };
     }
 
-    if (this == Infinity || this == -Infinity) {
-        return this;
+    if (num == Infinity || num == -Infinity) {
+        return num;
     }
     // Numbers with digits 1e+20 & beyond are automatically converted to exponential numbers, via the eval function
-    if (this >= 1e+20) {
-        return eval(this);
+    if (num >= 1e+20) {
+        return eval(num);
     }
     // Decimal numbers that contain many zeros at the end of it
-    if (/0/g.test(/(0*$)/ [Symbol.match](this.toString())[0])) {
-        console.log("Array Length 0's : " + /0/g.test(/(0*$)/ [Symbol.match](this.toString())[0]));
-        return this % 1 === 0 ? eval(this) : parseFloat(this.toString().replace(/(0)/, ""));
+    if (/0/g.test(/(0*$)/ [Symbol.match](num.toString())[0])) {
+
+        return num % 1 === 0 ? eval(num) : parseFloat(num.toString().replace(/(0)/, ""));
     }
     // Decimal numbers that contain many nines at the end of it
 
-    if (/9/g.test(/(9*$)/ [Symbol.match](this.toString())[0])) {
-        console.log("I should see this : " + this)
-        if (/(9*$)/ [Symbol.match](this.toString())[0].length >= 3) {
-            let strEndNine = this.toString();
+    if (/9/g.test(/(9*$)/ [Symbol.match](num.toString())[0])) {
+
+        if (/(9*$)/ [Symbol.match](num.toString())[0].length >= 3) {
+            let strEndNine = num.toString();
             let num = strEndNine.match(/(\d9*)$/)[0][0];
             if (num === "9") {
-                console.log("if")
-                console.log(parseInt(strEndNine.split(".")[0]));
                 return parseInt(strEndNine.split(".")[0]) + 1;
 
             } else {
-                console.log("else");
+
                 let index = strEndNine.indexOf(num);
                 let numAtIndex = strEndNine[strEndNine.indexOf(num)];
                 let indexNum = parseInt(num) + 1;
@@ -76,48 +72,37 @@ function roundSF(significantFig) {
                 return strEndNine.slice(0, index) + strEndNine.slice(index, afterDecimal.length + 1) + indexNum;
             }
         } else {
-            return this;
+            return num;
         }
     }
-    var matches = this.toString().match(/^-?(0+)\.(0*)/);
-    console.log(matches);
+    let matches = num.toString().match(/^-?(0+)\.(0*)/);
+
+
     // starting with "0."
-
     if (matches) {
-        var firstIndex = matches[0].length;
-        var prefix = matches[0];
+        let firstIndex = matches[0].length;
+        let prefix = matches[0];
 
-        sf = Number(this.toString().substring(firstIndex, firstIndex + significantFig + 1));
+        sf = Number(num.toString().substring(firstIndex, firstIndex + significantFig + 1));
         sf = Math.round(sf / 10);
         sf = prefix + sf.toString();
         // get rid of 0.9, 0.09, 0.009 etc rounding error
-
         negateRoundError = Number(sf).toFixed(matches[2].length + significantFig);
-        console.log(matches.input);
-        console.log(negateRoundError.toString());
-
-        // if (matches.input >= .15 && matches.input < 0.2) {
-        //     return matches.input;
-        // }
-
-        //return;
-        // return negateRoundError / matches.input;
-        console.log(negateRoundError, matches.input);
         return negateRoundError < matches.input ? Math.round10(matches.input, -12) : (negateRoundError / matches.input) >= (0.2 + Math.pow(1, -100)) / 0.15 ? negateRoundError : matches.input;
     }
 
     // starting with something else like -5.574487436097115
     else {
-        matches = this.toString().match(/^(-?(\d+))\.(\d+)/);
-        var decimalShift = significantFig - matches[2].length;
-        var rounded = Math.round(this * Math.pow(10, decimalShift));
+        matches = num.toString().match(/^(-?(\d+))\.(\d+)/);
+        let decimalShift = significantFig - matches[2].length;
+        let rounded = Math.round(num * Math.pow(10, decimalShift));
         rounded /= Math.pow(10, decimalShift);
         return rounded.toFixed(decimalShift);
     }
 }
 Number.prototype.roundSF = roundSF;
 
-describe("Testing Out this significant figure function", function() {
+describe("Testing Out num significant figure function", function() {
     // remove true,false toggle for production code
     const testCases = [{
             name: "12 s.f [float]",
