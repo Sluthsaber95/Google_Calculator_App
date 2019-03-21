@@ -212,6 +212,7 @@ const calculate = (string) => {
     let bracketedValue = "";
 
     string = convertSymbol(string);
+    // START review here
     do {
         let functionUtilized = "";
         if (/(ln|log|sin|cos|tan)\([^()"]*(?:"[^"]*"[^()"]*)*\)/g.test(string)) {
@@ -328,7 +329,7 @@ const calculate = (string) => {
             break;
         }
     } while (!/^([-+]?[0-9]*\.*[0-9]+?)$/.test(string) || i == 3);
-
+    // End review here
     if (string == Infinity || string == -Infinity) {
         return string;
     }
